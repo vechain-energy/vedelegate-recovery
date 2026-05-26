@@ -60,6 +60,25 @@ const actionLabel = (term: LockedTerm) => {
   return 'No action'
 }
 
+const symbolBadgeText = (symbol: string) => symbol.slice(0, 6)
+
+type TokenMarkProps = {
+  symbol: string
+  iconUrl?: string
+}
+
+function TokenMark({ symbol, iconUrl }: TokenMarkProps) {
+  if (iconUrl) {
+    return <img src={iconUrl} alt="" className="token-icon" />
+  }
+
+  return (
+    <span className="token-symbol" aria-hidden="true">
+      {symbolBadgeText(symbol)}
+    </span>
+  )
+}
+
 export function RecoveryDashboard({
   logoUrl,
   walletAddress,
@@ -176,9 +195,11 @@ export function RecoveryDashboard({
                   <div className="asset-table">
                     {assets.vetBalance > 0n ? (
                       <div className="asset-row">
-                        <div>
-                          <strong>VET</strong>
-                          <span>NATIVE</span>
+                        <div className="asset-name">
+                          <TokenMark symbol="VET" />
+                          <span>
+                            <strong>VET</strong>
+                          </span>
                         </div>
                         <code>{formatTokenAmount(assets.vetBalance, 18)} VET</code>
                         <button type="button" className="action-button small" onClick={onRecoverVet} disabled={isBusy}>
@@ -193,7 +214,7 @@ export function RecoveryDashboard({
                       return (
                         <div className="asset-row" key={item.token.address}>
                           <div className="asset-name">
-                            {item.token.iconUrl ? <img src={item.token.iconUrl} alt="" className="token-icon" /> : null}
+                            <TokenMark symbol={item.token.symbol} iconUrl={item.token.iconUrl} />
                             <span>
                               <strong>{item.token.symbol}</strong>
                               <small>{shortAddress(item.token.address)}</small>

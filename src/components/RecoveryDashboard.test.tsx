@@ -3,7 +3,14 @@ import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 import type { Address } from 'viem'
 import { RecoveryDashboard } from './RecoveryDashboard'
-import { demoAssets, demoB3trAddress, demoPools, demoTerms, demoVot3Address } from '../demoData'
+import {
+  demoAssets,
+  demoB3trAddress,
+  demoLongPoolTokenId,
+  demoPools,
+  demoTerms,
+  demoVot3Address,
+} from '../demoData'
 import type { LockedTerm } from '../lib/lockedTerms'
 import type { PoolAssetSnapshot, PoolInfo } from '../lib/pools'
 
@@ -80,7 +87,7 @@ describe('RecoveryDashboard', () => {
 
   it('hides zero token rows', () => {
     renderDashboard()
-    expect(screen.getByText('B3TR')).toBeInTheDocument()
+    expect(screen.getAllByText('B3TR')).not.toHaveLength(0)
     expect(screen.queryByText('VOT3')).not.toBeInTheDocument()
   })
 
@@ -99,18 +106,20 @@ describe('RecoveryDashboard', () => {
     renderDashboard({
       pools: demoPools,
       selectedPool: demoPools[0],
-      selectedPoolTokenId: '42',
+      selectedPoolTokenId: demoLongPoolTokenId.toString(),
       assets: demoAssets,
       terms: demoTerms,
       b3trAddress: demoB3trAddress,
       vot3Address: demoVot3Address,
     })
 
-    expect(screen.getByText('VET')).toBeInTheDocument()
-    expect(screen.getByText('B3TR')).toBeInTheDocument()
-    expect(screen.getByText('VOT3')).toBeInTheDocument()
-    expect(screen.getByText('veB3TR')).toBeInTheDocument()
-    expect(screen.getByText('SHA')).toBeInTheDocument()
+    expect(screen.getByText(`Pool #${demoLongPoolTokenId.toString()}`)).toBeInTheDocument()
+    expect(screen.queryByText('NATIVE')).not.toBeInTheDocument()
+    expect(screen.getAllByText('VET')).not.toHaveLength(0)
+    expect(screen.getAllByText('B3TR')).not.toHaveLength(0)
+    expect(screen.getAllByText('VOT3')).not.toHaveLength(0)
+    expect(screen.getAllByText('veB3TR')).not.toHaveLength(0)
+    expect(screen.getAllByText('SHA')).not.toHaveLength(0)
     expect(screen.queryByText('OCE')).not.toBeInTheDocument()
     expect(screen.getAllByRole('button', { name: 'Close + withdraw' })).toHaveLength(2)
     expect(screen.getByRole('button', { name: 'Withdraw term' })).toBeInTheDocument()

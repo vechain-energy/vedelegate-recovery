@@ -8,16 +8,18 @@ export const demoVot3Address = '0x76Ca782B59C74d088C7D2Cce2f211BC00836c602' as A
 export const demoVeb3trAddress = '0x420dFe6B7Bc605Ce61E9839c8c0E745870A6CDE0' as Address
 const demoShaAddress = '0x5db3c8a942333f6468176a870db36eef120a34dc' as Address
 const demoOceanAddress = '0x0ce6661b4ba86a0ea7ca2bd86a0de87b0b860f14' as Address
+export const demoLongPoolTokenId = 1234567890123456789012345678901234567890n
+const demoSecondLongPoolTokenId = 9876543210987654321098765432109876543210n
 
 export const demoPools: PoolInfo[] = [
   {
-    tokenId: 42n,
-    tokenIdText: '42',
+    tokenId: demoLongPoolTokenId,
+    tokenIdText: demoLongPoolTokenId.toString(),
     address: '0xBEEF000000000000000000000000000000000042' as Address,
   },
   {
-    tokenId: 77n,
-    tokenIdText: '77',
+    tokenId: demoSecondLongPoolTokenId,
+    tokenIdText: demoSecondLongPoolTokenId.toString(),
     address: '0xBEEF000000000000000000000000000000000077' as Address,
   },
 ]
@@ -64,7 +66,7 @@ export const demoTerms: LockedTerm[] = [
     metadata: {
       minter: demoWalletAddress,
       amount: 5000000000000000000000n,
-      veDelegatePoolTokenId: 42n,
+      veDelegatePoolTokenId: demoLongPoolTokenId,
       optionId: 2n,
       startTime: 1710000000n,
       autoRenew: true,
@@ -92,7 +94,7 @@ export const demoTerms: LockedTerm[] = [
     metadata: {
       minter: demoWalletAddress,
       amount: 3000000000000000000000n,
-      veDelegatePoolTokenId: 42n,
+      veDelegatePoolTokenId: demoLongPoolTokenId,
       optionId: 2n,
       startTime: 1712000000n,
       autoRenew: false,
@@ -120,7 +122,7 @@ export const demoTerms: LockedTerm[] = [
     metadata: {
       minter: demoWalletAddress,
       amount: 2500000000000000000000n,
-      veDelegatePoolTokenId: 42n,
+      veDelegatePoolTokenId: demoLongPoolTokenId,
       optionId: 4n,
       startTime: 1790000000n,
       autoRenew: false,
@@ -148,7 +150,7 @@ export const demoTerms: LockedTerm[] = [
     metadata: {
       minter: demoWalletAddress,
       amount: 4000000000000000000000n,
-      veDelegatePoolTokenId: 42n,
+      veDelegatePoolTokenId: demoLongPoolTokenId,
       optionId: 3n,
       startTime: 1705000000n,
       autoRenew: false,
@@ -176,7 +178,7 @@ export const demoTerms: LockedTerm[] = [
     metadata: {
       minter: demoWalletAddress,
       amount: 1000000000000000000000n,
-      veDelegatePoolTokenId: 42n,
+      veDelegatePoolTokenId: demoLongPoolTokenId,
       optionId: 1n,
       startTime: 1700000000n,
       autoRenew: false,
@@ -205,8 +207,8 @@ export const getDemoAssets = (tokenIdText?: string): PoolAssetSnapshot | undefin
     return undefined
   }
 
-  return tokenIdText === '77' ? demoEmptyAssets : demoAssets
+  return tokenIdText === demoSecondLongPoolTokenId.toString() ? demoEmptyAssets : demoAssets
 }
 
 export const getDemoTerms = (tokenIdText?: string): LockedTerm[] =>
-  tokenIdText === '77' ? [] : demoTerms
+  tokenIdText === demoSecondLongPoolTokenId.toString() ? [] : demoTerms

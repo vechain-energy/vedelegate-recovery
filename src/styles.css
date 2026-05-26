@@ -220,7 +220,7 @@ code {
 .pool-row {
   display: grid;
   width: 100%;
-  grid-template-columns: auto 1fr;
+  grid-template-columns: minmax(0, 1fr) auto;
   gap: 10px;
   align-items: center;
   border: 1px solid var(--line);
@@ -241,6 +241,13 @@ code {
 .pool-row code {
   color: var(--muted);
   justify-self: end;
+}
+
+.pool-row span,
+.detail-head h2,
+.term-main strong,
+.term-main span {
+  overflow-wrap: anywhere;
 }
 
 .section-block {
@@ -310,6 +317,23 @@ code {
   border-radius: 50%;
   background: #0b0d11;
   border: 1px solid var(--line);
+}
+
+.token-symbol {
+  display: grid;
+  place-items: center;
+  flex: 0 0 30px;
+  width: 30px;
+  height: 30px;
+  border: 1px solid var(--line-hot);
+  border-radius: 50%;
+  background: var(--orange-soft);
+  color: var(--orange);
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  font-size: 0.58rem;
+  font-weight: 780;
+  letter-spacing: 0;
+  text-transform: uppercase;
 }
 
 .term-card {
