@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 import type { Address } from 'viem'
 import { RecoveryDashboard } from './RecoveryDashboard'
+import { demoAssets, demoB3trAddress, demoPools, demoTerms, demoVot3Address } from '../demoData'
 import type { LockedTerm } from '../lib/lockedTerms'
 import type { PoolAssetSnapshot, PoolInfo } from '../lib/pools'
 
@@ -92,5 +93,27 @@ describe('RecoveryDashboard', () => {
     expect(button).toBeDisabled()
     await user.click(button)
     expect(onRecoverAll).not.toHaveBeenCalled()
+  })
+
+  it('renders demo balances and term actions', () => {
+    renderDashboard({
+      pools: demoPools,
+      selectedPool: demoPools[0],
+      selectedPoolTokenId: '42',
+      assets: demoAssets,
+      terms: demoTerms,
+      b3trAddress: demoB3trAddress,
+      vot3Address: demoVot3Address,
+    })
+
+    expect(screen.getByText('VET')).toBeInTheDocument()
+    expect(screen.getByText('B3TR')).toBeInTheDocument()
+    expect(screen.getByText('VOT3')).toBeInTheDocument()
+    expect(screen.getByText('veB3TR')).toBeInTheDocument()
+    expect(screen.getByText('SHA')).toBeInTheDocument()
+    expect(screen.queryByText('OCE')).not.toBeInTheDocument()
+    expect(screen.getAllByRole('button', { name: 'Close + withdraw' })).toHaveLength(2)
+    expect(screen.getByRole('button', { name: 'Withdraw term' })).toBeInTheDocument()
+    expect(screen.getAllByRole('button', { name: 'No action' })).toHaveLength(2)
   })
 })

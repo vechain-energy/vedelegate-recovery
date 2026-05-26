@@ -22,6 +22,7 @@ const config: AppConfig = {
   nodeUrl: 'https://mainnet.vechain.org',
   tokenRegistryUrl: 'https://vechain.github.io/token-registry/main.json',
   walletConnectProjectId: '',
+  enableDemoData: false,
   addresses: {
     veDelegate: '0x7777777777777777777777777777777777777777',
     b3tr,

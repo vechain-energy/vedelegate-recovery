@@ -96,6 +96,19 @@ code {
   flex: 0 0 auto;
 }
 
+.demo-wallet {
+  border: 1px solid var(--line-hot);
+  border-radius: 2px;
+  min-height: 38px;
+  padding: 0 14px;
+  background: var(--orange-soft);
+  color: var(--orange);
+  font-size: 0.78rem;
+  font-weight: 780;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
 .console-grid {
   display: grid;
   grid-template-columns: 1fr;

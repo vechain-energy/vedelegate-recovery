@@ -6,6 +6,7 @@ import { appConfig } from './config'
 import { RecoveryDashboard } from './components/RecoveryDashboard'
 import { useLockedTerms, useOwnedPools, usePoolAssets, useTokenList } from './hooks/useRecoveryQueries'
 import { useRecoveryActions } from './hooks/useRecoveryActions'
+import { demoPools, demoWalletAddress, getDemoAssets, getDemoTerms } from './demoData'
 
 const hashQueryKey = (queryKey: readonly unknown[]): string =>
   JSON.stringify(queryKey, (_key: string, value: unknown) =>
@@ -46,12 +47,14 @@ const loginMethods: VechainKitProviderProps['loginMethods'] = [
 function RecoveryApp() {
   const { account } = useWallet()
   const queryClientInstance = useQueryClient()
-  const walletAddress = account?.address && isAddress(account.address) ? account.address : undefined
+  const isDemoMode = appConfig.enableDemoData && new URLSearchParams(window.location.search).get('demo') === 'balances'
+  const connectedWalletAddress = account?.address && isAddress(account.address) ? account.address : undefined
+  const walletAddress = isDemoMode ? demoWalletAddress : connectedWalletAddress
   const [selectedPoolTokenId, setSelectedPoolTokenId] = useState<string>()
 
   const tokenQuery = useTokenList(appConfig)
-  const poolsQuery = useOwnedPools(appConfig, walletAddress)
-  const pools = poolsQuery.data ?? []
+  const poolsQuery = useOwnedPools(appConfig, isDemoMode ? undefined : walletAddress)
+  const pools = isDemoMode ? demoPools : poolsQuery.data ?? []
 
   const selectedPool = useMemo(() => {
     if (pools.length === 0) {
@@ -66,26 +69,31 @@ function RecoveryApp() {
     }
   }, [selectedPool, selectedPoolTokenId])
 
-  const assetQuery = usePoolAssets(appConfig, selectedPool?.address, tokenQuery.data)
-  const termsQuery = useLockedTerms(appConfig, selectedPool?.address)
+  const assetQuery = usePoolAssets(appConfig, isDemoMode ? undefined : selectedPool?.address, tokenQuery.data)
+  const termsQuery = useLockedTerms(appConfig, isDemoMode ? undefined : selectedPool?.address)
   const actions = useRecoveryActions(appConfig, walletAddress)
+  const assets = isDemoMode ? getDemoAssets(selectedPool?.tokenIdText) : assetQuery.data
+  const terms = isDemoMode ? getDemoTerms(selectedPool?.tokenIdText) : termsQuery.data ?? []
 
   const refresh = () => {
+    if (isDemoMode) {
+      return
+    }
     void queryClientInstance.invalidateQueries()
   }
 
   const recoverVet = () => {
-    if (!walletAddress || !selectedPool || !assetQuery.data || assetQuery.data.vetBalance <= 0n) {
+    if (!walletAddress || !selectedPool || !assets || assets.vetBalance <= 0n || isDemoMode) {
       return
     }
-    void actions.recoverVet(selectedPool.address, walletAddress, assetQuery.data.vetBalance)
+    void actions.recoverVet(selectedPool.address, walletAddress, assets.vetBalance)
   }
 
   const recoverAll = () => {
-    if (!walletAddress || !selectedPool || !assetQuery.data) {
+    if (!walletAddress || !selectedPool || !assets || isDemoMode) {
       return
     }
-    void actions.recoverAll(selectedPool.address, walletAddress, assetQuery.data)
+    void actions.recoverAll(selectedPool.address, walletAddress, assets)
   }
 
   return (
@@ -93,38 +101,48 @@ function RecoveryApp() {
       <RecoveryDashboard
         logoUrl={`${import.meta.env.BASE_URL}logo.png`}
         walletAddress={walletAddress}
-        walletControl={<WalletButton />}
+        walletControl={
+          isDemoMode ? (
+            <button type="button" className="demo-wallet" disabled>
+              Demo wallet
+            </button>
+          ) : (
+            <WalletButton />
+          )
+        }
         networkLabel={appConfig.network}
         pools={pools}
         selectedPool={selectedPool}
         selectedPoolTokenId={selectedPool?.tokenIdText}
-        assets={assetQuery.data}
-        terms={termsQuery.data ?? []}
+        assets={assets}
+        terms={terms}
         b3trAddress={appConfig.addresses.b3tr}
         vot3Address={appConfig.addresses.vot3}
-        isPoolsLoading={poolsQuery.isLoading}
-        isAssetsLoading={assetQuery.isLoading || tokenQuery.isLoading}
-        isTermsLoading={termsQuery.isLoading}
-        isBusy={actions.isBusy}
-        errorText={actions.error ?? poolsQuery.error?.message ?? assetQuery.error?.message ?? termsQuery.error?.message}
+        isPoolsLoading={!isDemoMode && poolsQuery.isLoading}
+        isAssetsLoading={!isDemoMode && (assetQuery.isLoading || tokenQuery.isLoading)}
+        isTermsLoading={!isDemoMode && termsQuery.isLoading}
+        isBusy={!isDemoMode && actions.isBusy}
+        errorText={
+          isDemoMode ? undefined : actions.error ?? poolsQuery.error?.message ?? assetQuery.error?.message ?? termsQuery.error?.message
+        }
         onSelectPool={setSelectedPoolTokenId}
         onRefresh={refresh}
         onRecoverVet={recoverVet}
         onRecoverToken={(item) => {
-          if (!walletAddress || !selectedPool) {
+          if (!walletAddress || !selectedPool || isDemoMode) {
             return
           }
           void actions.recoverToken(selectedPool.address, walletAddress, item)
         }}
         onConvertVot3={(item) => {
-          if (!selectedPool) {
+          if (!selectedPool || isDemoMode) {
             return
           }
           void actions.convertVot3(selectedPool.address, item.balance)
         }}
         onRecoverAll={recoverAll}
         onRecoverTerm={(term) => {
-          if (!selectedPool) {
+          if (!selectedPool || isDemoMode) {
             return
           }
           void actions.recoverTerm(selectedPool.address, term)

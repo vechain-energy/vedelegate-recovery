@@ -7,6 +7,7 @@ export type AppConfig = {
   nodeUrl: string
   tokenRegistryUrl: string
   walletConnectProjectId: string
+  enableDemoData: boolean
   delegationUrl?: string
   addresses: {
     veDelegate: Address
@@ -50,6 +51,7 @@ export const appConfig: AppConfig = {
   nodeUrl: import.meta.env.VITE_NODE_URL || DEFAULTS.nodeUrl,
   tokenRegistryUrl: `https://vechain.github.io/token-registry/${network === 'main' ? 'main' : 'test'}.json`,
   walletConnectProjectId: import.meta.env.VITE_WALLET_CONNECT_PROJECT_ID || '',
+  enableDemoData: import.meta.env.VITE_ENABLE_DEMO_DATA === 'true',
   delegationUrl: import.meta.env.VITE_DELEGATION_URL || undefined,
   addresses: {
     veDelegate: getAddressEnv(import.meta.env.VITE_VEDELEGATE_ADDRESS, DEFAULTS.veDelegate, 'VITE_VEDELEGATE_ADDRESS'),

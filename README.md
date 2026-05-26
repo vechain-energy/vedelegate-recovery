@@ -34,6 +34,7 @@ Copy `.env.example` to `.env` when overrides are needed:
 - `VITE_WALLET_CONNECT_PROJECT_ID`
 - `VITE_DELEGATION_URL`
 - `VITE_BASE_PATH`
+- `VITE_ENABLE_DEMO_DATA`: set `true` to enable `?demo=balances` local fixture screenshots
 
 ## GitHub Pages
 
@@ -46,3 +47,15 @@ Vite base path uses `VITE_BASE_PATH` first, then the GitHub repository name in A
 All recovery calls execute through the user's pool smart wallet. The signer remains the owner wallet. Recover-all is a multi-clause transaction: all clauses succeed or all fail.
 
 Closing an ended auto-renew term first disables auto-renew, then closes, then withdraws term funds into the owner pool. After that, recover B3TR from the pool.
+
+## Demo Fixtures
+
+For screenshots without a wallet, run with demo data enabled:
+
+```sh
+VITE_ENABLE_DEMO_DATA=true npm run dev
+```
+
+Open `/?demo=balances`.
+
+The fixture covers multi-pool selection, VET, B3TR, VOT3, veB3TR, a registry token, hidden zero balances, ended terms with and without auto-renew, a locked active term, a closed funded term, and a closed empty term.
