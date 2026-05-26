@@ -1,5 +1,13 @@
 import { describe, expect, it } from 'vitest'
-import { demoAssets, demoB3trAddress, demoPools, demoTerms, demoVeb3trAddress, demoVot3Address } from './demoData'
+import {
+  buildDemoRecoverAllSimulationSummary,
+  demoAssets,
+  demoB3trAddress,
+  demoPools,
+  demoTerms,
+  demoVeb3trAddress,
+  demoVot3Address,
+} from './demoData'
 
 describe('demo data', () => {
   it('covers liquid balance scenarios', () => {
@@ -43,5 +51,21 @@ describe('demo data', () => {
     expect(demoTerms.some((term) => !term.metadata.autoRenew && term.actionKind === 'close-ended')).toBe(true)
     expect(demoTerms.some((term) => term.actionKind === 'withdraw-closed')).toBe(true)
     expect(demoTerms.filter((term) => term.actionKind === 'none')).toHaveLength(2)
+  })
+
+  it('builds a demo recover-all signing preview with fungible and NFT assets', () => {
+    const summary = buildDemoRecoverAllSimulationSummary(demoAssets)
+
+    expect(summary.reverted).toBe(false)
+    expect(summary.clauseCount).toBe(8)
+    expect(summary.items.map((item) => item.displayValue)).toEqual([
+      '1234.5678 VET',
+      '9292 B3TR',
+      '530 veB3TR',
+      '72 SHA',
+      'GM #8102',
+      'GM #8103',
+    ])
+    expect(summary.items.filter((item) => item.kind === 'nft')).toHaveLength(2)
   })
 })

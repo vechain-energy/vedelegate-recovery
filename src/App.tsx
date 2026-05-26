@@ -5,10 +5,12 @@ import { isAddress } from 'viem'
 import { appConfig } from './config'
 import { VECHAIN_KIT_LANGUAGE } from './config/localization'
 import { HeaderWalletControl } from './components/HeaderWalletControl'
+import { RecoveryTransactionModal } from './components/RecoveryTransactionModal'
 import { RecoveryDashboard } from './components/RecoveryDashboard'
 import { useLockedTerms, useOwnedPools, usePoolAssets, useTokenList } from './hooks/useRecoveryQueries'
 import { useRecoveryActions } from './hooks/useRecoveryActions'
-import { demoPools, demoWalletAddress, getDemoAssets, getDemoTerms } from './demoData'
+import { buildDemoRecoverAllSimulationSummary, demoPools, demoWalletAddress, getDemoAssets, getDemoTerms } from './demoData'
+import type { RecoverySimulationSummary } from './lib/simulation'
 
 const hashQueryKey = (queryKey: readonly unknown[]): string =>
   JSON.stringify(queryKey, (_key: string, value: unknown) =>
@@ -48,6 +50,11 @@ const loginMethods: VechainKitProviderProps['loginMethods'] = [
 
 const hiddenQuickActions: NonNullable<VechainKitProviderProps['hiddenQuickActions']> = ['send', 'swap', 'receive']
 
+type DemoPreview = {
+  title: string
+  summary: RecoverySimulationSummary
+}
+
 function RecoveryApp() {
   const { account } = useWallet()
   const queryClientInstance = useQueryClient()
@@ -59,6 +66,7 @@ function RecoveryApp() {
   const connectedWalletAddress = account?.address && isAddress(account.address) ? account.address : undefined
   const walletAddress = isDemoMode ? demoWalletAddress : connectedWalletAddress
   const [selectedPoolTokenId, setSelectedPoolTokenId] = useState<string>()
+  const [demoPreview, setDemoPreview] = useState<DemoPreview>()
 
   const tokenQuery = useTokenList(appConfig)
   const poolsQuery = useOwnedPools(appConfig, isDemoMode ? undefined : walletAddress)
@@ -102,6 +110,14 @@ function RecoveryApp() {
   }
 
   const recoverAll = () => {
+    if (isDemoMode && assets) {
+      setDemoPreview({
+        title: 'Recover pool assets',
+        summary: buildDemoRecoverAllSimulationSummary(assets),
+      })
+      return
+    }
+
     if (!walletAddress || !selectedPool || !assets || isDemoMode) {
       return
     }
@@ -159,6 +175,19 @@ function RecoveryApp() {
         }}
       />
       {actions.modal}
+      {isDemoMode && demoPreview ? (
+        <RecoveryTransactionModal
+          isOpen
+          title={demoPreview.title}
+          phase="ready"
+          network={appConfig.network}
+          summary={demoPreview.summary}
+          isWalletWaiting={false}
+          isChainPending={false}
+          onClose={() => setDemoPreview(undefined)}
+          onConfirm={() => undefined}
+        />
+      ) : null}
     </>
   )
 }

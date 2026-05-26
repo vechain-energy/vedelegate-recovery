@@ -1,6 +1,8 @@
 import type { Address } from 'viem'
 import type { LockedTerm } from './lib/lockedTerms'
 import type { PoolAssetSnapshot, PoolInfo } from './lib/pools'
+import type { RecoverySimulationSummary, RecoveryTransferItem } from './lib/simulation'
+import { formatTokenAmount, sameAddress } from './lib/format'
 import { tokenRegistryAssetUrl } from './lib/tokens'
 
 export const demoWalletAddress = '0xA11CE00000000000000000000000000000000000' as Address
@@ -270,3 +272,87 @@ export const getDemoAssets = (tokenIdText?: string): PoolAssetSnapshot | undefin
 
 export const getDemoTerms = (tokenIdText?: string): LockedTerm[] =>
   tokenIdText === demoSecondLongPoolTokenId.toString() ? [] : demoTerms
+
+const toFungibleDemoItem = (
+  id: string,
+  symbol: string,
+  amount: bigint,
+  decimals: number,
+  iconUrl?: string,
+): RecoveryTransferItem => ({
+  id,
+  kind: symbol === 'VET' ? 'vet' : 'erc20',
+  symbol,
+  label: symbol,
+  amount,
+  decimals,
+  iconUrl,
+  displayValue: `${formatTokenAmount(amount, decimals)} ${symbol}`,
+})
+
+export const buildDemoRecoverAllSimulationSummary = (
+  assets: PoolAssetSnapshot,
+): RecoverySimulationSummary => {
+  const items: RecoveryTransferItem[] = []
+  const b3trBalance = assets.tokenBalances.find((item) => sameAddress(item.token.address, demoB3trAddress))
+  const vot3Balance = assets.tokenBalances.find((item) => sameAddress(item.token.address, demoVot3Address))
+  const recoveredB3trAmount = (b3trBalance?.balance ?? 0n) + (vot3Balance?.balance ?? 0n)
+  const extraTokenBalances = assets.tokenBalances.filter(
+    (item) =>
+      item.balance > 0n &&
+      !sameAddress(item.token.address, demoB3trAddress) &&
+      !sameAddress(item.token.address, demoVot3Address),
+  )
+
+  if (assets.vetBalance > 0n) {
+    items.push(toFungibleDemoItem('vet', 'VET', assets.vetBalance, 18))
+  }
+
+  if (recoveredB3trAmount > 0n) {
+    items.push(
+      toFungibleDemoItem(
+        `erc20-${demoB3trAddress.toLowerCase()}`,
+        'B3TR',
+        recoveredB3trAmount,
+        b3trBalance?.token.decimals ?? 18,
+        b3trBalance?.token.iconUrl,
+      ),
+    )
+  }
+
+  extraTokenBalances.forEach((item) => {
+    items.push(
+      toFungibleDemoItem(
+        `erc20-${item.token.address.toLowerCase()}`,
+        item.token.symbol,
+        item.balance,
+        item.token.decimals,
+        item.token.iconUrl,
+      ),
+    )
+  })
+
+  assets.gmNfts.forEach((gmNft) => {
+    items.push({
+      id: `nft-${demoGalaxyMemberAddress.toLowerCase()}-${gmNft.tokenIdText}`,
+      kind: 'nft',
+      symbol: 'GM',
+      label: `GM #${gmNft.tokenIdText}`,
+      tokenAddress: demoGalaxyMemberAddress,
+      tokenId: gmNft.tokenId,
+      iconUrl: gmNft.imageUrl,
+      displayValue: `GM #${gmNft.tokenIdText}`,
+    })
+  })
+
+  return {
+    reverted: false,
+    clauseCount:
+      (assets.vetBalance > 0n ? 1 : 0) +
+      ((vot3Balance?.balance ?? 0n) > 0n ? 1 : 0) +
+      (recoveredB3trAmount > 0n ? 1 : 0) +
+      extraTokenBalances.length +
+      assets.gmNfts.reduce((count, gmNft) => count + (gmNft.nodeIdAttached > 0n ? 2 : 1), 0),
+    items,
+  }
+}

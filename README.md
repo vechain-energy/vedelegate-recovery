@@ -10,6 +10,14 @@ https://vechain-energy.github.io/vedelegate-recovery/
 
 ![Pool recovery dashboard](docs/screenshots/dashboard-demo.jpg)
 
+## Demo Video
+
+This demo uses local fixture data, skips wallet connection, and stops at the signing preview.
+
+<video src="docs/videos/recovery-demo.mp4" controls muted playsinline width="100%"></video>
+
+[Open recovery demo video](docs/videos/recovery-demo.mp4)
+
 ## What It Recovers
 
 - VET held by a pool wallet.
