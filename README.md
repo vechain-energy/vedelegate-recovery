@@ -50,7 +50,7 @@ Closing an ended auto-renew term first disables auto-renew, then closes, then wi
 
 ## Wallet UI
 
-The header uses local connect and connected-wallet buttons that open VeChain Kit modals through Kit hooks. Recovery console styles are scoped under `.app-shell` so they do not override VeChain Kit or Chakra modal styles. Generic send, swap, and receive quick actions are hidden.
+The header uses local connect and connected-wallet buttons that open VeChain Kit modals through Kit hooks. VeChain Kit dark mode is enabled through the provider. Recovery console styles and theme tokens are scoped under `.app-shell`; the only global page styles are body margin reset and the `#root` backdrop. No custom VeChain Kit theme variables or modal CSS overrides are set. Generic send, swap, and receive quick actions are hidden.
 
 ## Interface Style
 
