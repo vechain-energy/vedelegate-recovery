@@ -52,6 +52,10 @@ Closing an ended auto-renew term first disables auto-renew, then closes, then wi
 
 The header uses local connect and connected-wallet buttons that open VeChain Kit modals through Kit hooks. Recovery console styles are scoped under `.app-shell` so they do not override VeChain Kit or Chakra modal styles. Generic send, swap, and receive quick actions are hidden.
 
+## Interface Style
+
+Pool metadata is unframed. Pools, liquid funds, and locked terms each use one thin container with row dividers inside, avoiding nested boxes around the same content.
+
 ## Demo Fixtures
 
 For screenshots without a wallet, run with demo data enabled:

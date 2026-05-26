@@ -83,6 +83,8 @@ describe('RecoveryDashboard', () => {
     renderDashboard()
     expect(screen.getByRole('button', { name: /#1/ })).toBeInTheDocument()
     expect(screen.getByText('Pool #1')).toBeInTheDocument()
+    expect(screen.getByTitle(poolAddress)).toHaveTextContent('0x2222...2222')
+    expect(screen.queryByText(poolAddress)).not.toBeInTheDocument()
   })
 
   it('hides zero token rows', () => {

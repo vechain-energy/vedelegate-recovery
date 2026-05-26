@@ -1,17 +1,18 @@
 :root {
   color-scheme: dark;
-  --bg: #080a0d;
-  --panel: #101318;
-  --panel-2: #151922;
-  --line: #2a303a;
-  --line-hot: rgba(249, 115, 22, 0.62);
-  --text: #f2f5f7;
-  --muted: #8c96a3;
-  --faint: #5d6672;
-  --orange: #f97316;
-  --orange-soft: rgba(249, 115, 22, 0.12);
-  --green: #74d27a;
-  --shadow: rgba(0, 0, 0, 0.42);
+  --bg: #07090b;
+  --panel: rgba(17, 20, 25, 0.86);
+  --panel-2: rgba(255, 255, 255, 0.035);
+  --line: rgba(161, 173, 190, 0.18);
+  --line-soft: rgba(161, 173, 190, 0.1);
+  --line-hot: rgba(229, 116, 39, 0.62);
+  --text: #f3f0ea;
+  --muted: #9ba3ae;
+  --faint: #68717d;
+  --orange: #e8752d;
+  --orange-soft: rgba(232, 117, 45, 0.12);
+  --green: #8ccd80;
+  --shadow: rgba(0, 0, 0, 0.34);
 }
 
 .app-shell,
@@ -24,8 +25,8 @@ body {
   min-width: 320px;
   min-height: 100vh;
   background:
-    radial-gradient(circle at 75% 10%, rgba(249, 115, 22, 0.08), transparent 24rem),
-    linear-gradient(180deg, #0c1015 0%, #080a0d 55%, #050607 100%);
+    radial-gradient(circle at 78% 0%, rgba(232, 117, 45, 0.08), transparent 25rem),
+    linear-gradient(180deg, #0b0f14 0%, #07090b 52%, #050607 100%);
 }
 
 .app-shell button {
@@ -37,9 +38,9 @@ body {
 }
 
 .app-shell {
-  width: min(1220px, 100%);
+  width: min(1180px, 100%);
   margin: 0 auto;
-  padding: 14px;
+  padding: 16px;
   color: var(--text);
   font-family:
     Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
@@ -50,29 +51,30 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
-  padding: 10px 0 18px;
+  gap: 18px;
+  padding: 14px 0 26px;
 }
 
 .brand {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 14px;
   min-width: 0;
 }
 
 .brand-logo {
-  width: 46px;
-  height: 46px;
+  width: 44px;
+  height: 44px;
   object-fit: contain;
-  filter: drop-shadow(0 0 18px rgba(249, 115, 22, 0.18));
+  filter: drop-shadow(0 10px 18px rgba(232, 117, 45, 0.16));
 }
 
 .brand h1,
-.panel h2 {
+.panel-head h2,
+.pool-summary h2 {
   margin: 0;
   letter-spacing: 0;
-  line-height: 1.05;
+  line-height: 1.08;
 }
 
 .brand h1 {
@@ -88,7 +90,7 @@ body {
 .term-grid span {
   color: var(--muted);
   font-size: 0.72rem;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
 }
 
@@ -103,7 +105,7 @@ body {
 .demo-wallet,
 .wallet-connect-button {
   border: 1px solid var(--line-hot);
-  border-radius: 2px;
+  border-radius: 6px;
   min-height: 38px;
   padding: 0 14px;
   background: var(--orange-soft);
@@ -130,7 +132,7 @@ body {
   width: min(100%, 260px);
   min-height: 46px;
   border: 1px solid var(--line-hot);
-  border-radius: 2px;
+  border-radius: 8px;
   background: rgba(255, 255, 255, 0.03);
   color: var(--text);
   padding: 6px 10px;
@@ -180,22 +182,12 @@ body {
 .console-grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 14px;
-}
-
-.panel {
-  border: 1px solid var(--line);
-  border-radius: 2px;
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.018), transparent),
-    var(--panel);
-  box-shadow: 0 18px 44px var(--shadow);
-  min-width: 0;
+  gap: 20px;
 }
 
 .pool-panel,
 .detail-panel {
-  padding: 12px;
+  min-width: 0;
 }
 
 .panel-head {
@@ -203,25 +195,39 @@ body {
   justify-content: space-between;
   gap: 12px;
   align-items: flex-start;
-  border-bottom: 1px solid var(--line);
-  padding-bottom: 12px;
-  margin-bottom: 12px;
+  padding: 2px 2px 12px;
 }
 
-.detail-head span {
+.panel-head span,
+.pool-summary span {
   display: block;
   overflow-wrap: anywhere;
   max-width: 100%;
 }
 
-.panel h2 {
+.pool-summary span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.panel-head h2,
+.pool-summary h2 {
   font-size: 1rem;
   font-weight: 720;
 }
 
+.pool-summary {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: flex-start;
+  padding: 2px 2px 18px;
+}
+
 .action-button,
 .ghost-button {
-  border-radius: 2px;
+  border-radius: 6px;
   border: 1px solid var(--line-hot);
   min-height: 34px;
   padding: 0 12px;
@@ -229,7 +235,7 @@ body {
   color: #140a03;
   font-size: 0.76rem;
   font-weight: 780;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.03em;
   text-transform: uppercase;
   cursor: pointer;
 }
@@ -258,7 +264,7 @@ body {
 .button-spinner {
   width: 12px;
   height: 12px;
-  border: 2px solid rgba(249, 115, 22, 0.24);
+  border: 2px solid rgba(232, 117, 45, 0.24);
   border-top-color: var(--orange);
   border-radius: 50%;
   animation: spin 0.72s linear infinite;
@@ -286,11 +292,13 @@ body {
   place-items: center;
   gap: 6px;
   min-height: 170px;
-  border: 1px dashed var(--line);
-  background: rgba(255, 255, 255, 0.018);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
   color: var(--faint);
   text-align: center;
   padding: 18px;
+  box-shadow: 0 18px 44px var(--shadow);
 }
 
 .empty-state strong {
@@ -299,11 +307,20 @@ body {
 
 .empty-state.compact {
   min-height: 82px;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  padding: 18px 8px;
 }
 
 .pool-list {
   display: grid;
-  gap: 8px;
+  gap: 0;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+  box-shadow: 0 18px 44px var(--shadow);
 }
 
 .pool-row {
@@ -312,19 +329,23 @@ body {
   grid-template-columns: minmax(0, 1fr) auto;
   gap: 10px;
   align-items: center;
-  border: 1px solid var(--line);
-  border-radius: 2px;
-  background: var(--panel-2);
+  border: 0;
+  border-top: 1px solid var(--line-soft);
+  background: transparent;
   color: var(--text);
-  min-height: 46px;
-  padding: 0 10px;
+  min-height: 50px;
+  padding: 0 12px;
   text-align: left;
   cursor: pointer;
 }
 
+.pool-row:first-child {
+  border-top: 0;
+}
+
 .pool-row.active {
-  border-color: var(--line-hot);
-  box-shadow: inset 3px 0 0 var(--orange);
+  background: rgba(232, 117, 45, 0.09);
+  box-shadow: inset 2px 0 0 var(--orange);
 }
 
 .pool-row code {
@@ -341,7 +362,7 @@ body {
 }
 
 .pool-row span,
-.detail-head h2,
+.pool-summary h2,
 .term-main strong,
 .term-main span {
   overflow-wrap: anywhere;
@@ -349,8 +370,13 @@ body {
 
 .section-block {
   display: grid;
-  gap: 10px;
-  margin-top: 16px;
+  gap: 0;
+  margin-top: 18px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+  box-shadow: 0 18px 44px var(--shadow);
 }
 
 .section-title {
@@ -358,11 +384,14 @@ body {
   align-items: center;
   justify-content: space-between;
   gap: 10px;
+  min-height: 48px;
+  padding: 0 14px;
+  border-bottom: 1px solid var(--line-soft);
 }
 
 .section-title span {
   color: var(--text);
-  font-weight: 740;
+  font-weight: 720;
 }
 
 .section-title em {
@@ -372,7 +401,7 @@ body {
 .asset-table,
 .term-list {
   display: grid;
-  gap: 8px;
+  gap: 0;
 }
 
 .asset-row {
@@ -380,14 +409,24 @@ body {
   grid-template-columns: 1fr;
   gap: 8px;
   align-items: center;
-  border: 1px solid var(--line);
-  background: var(--panel-2);
-  padding: 10px;
+  border-top: 1px solid var(--line-soft);
+  background: transparent;
+  padding: 12px 14px;
+}
+
+.asset-row:first-child,
+.term-card:first-child {
+  border-top: 0;
 }
 
 .asset-row > code {
   color: var(--green);
   overflow-wrap: anywhere;
+}
+
+.asset-row > button {
+  justify-self: end;
+  min-width: 108px;
 }
 
 .asset-name {
@@ -399,7 +438,7 @@ body {
 
 .asset-name span {
   display: grid;
-  gap: 2px;
+  gap: 3px;
 }
 
 .asset-name small {
@@ -409,8 +448,8 @@ body {
 }
 
 .token-icon {
-  width: 24px;
-  height: 24px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
   background: #0b0d11;
   border: 1px solid var(--line);
@@ -419,13 +458,13 @@ body {
 .token-symbol {
   display: grid;
   place-items: center;
-  flex: 0 0 30px;
-  width: 30px;
-  height: 30px;
-  border: 1px solid var(--line-hot);
+  flex: 0 0 28px;
+  width: 28px;
+  height: 28px;
+  border: 1px solid var(--line);
   border-radius: 50%;
-  background: var(--orange-soft);
-  color: var(--orange);
+  background: var(--panel-2);
+  color: var(--muted);
   font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
   font-size: 0.58rem;
   font-weight: 780;
@@ -436,9 +475,9 @@ body {
 .term-card {
   display: grid;
   gap: 10px;
-  border: 1px solid var(--line);
-  background: var(--panel-2);
-  padding: 10px;
+  border-top: 1px solid var(--line-soft);
+  background: transparent;
+  padding: 14px;
 }
 
 .term-main {
@@ -454,12 +493,13 @@ body {
 
 .term-main em {
   align-self: start;
-  border: 1px solid var(--line-hot);
-  color: var(--orange);
+  border: 1px solid var(--line-soft);
+  border-radius: 999px;
+  color: var(--muted);
   font-size: 0.66rem;
   font-style: normal;
-  font-weight: 760;
-  padding: 4px 6px;
+  font-weight: 720;
+  padding: 4px 8px;
 }
 
 .term-grid {
@@ -478,8 +518,14 @@ body {
   overflow-wrap: anywhere;
 }
 
+.term-card > button {
+  justify-self: end;
+  min-width: 150px;
+}
+
 .error-line {
   border: 1px solid rgba(239, 68, 68, 0.52);
+  border-radius: 8px;
   background: rgba(239, 68, 68, 0.08);
   color: #fecaca;
   padding: 10px;
@@ -488,12 +534,13 @@ body {
 
 @media (min-width: 720px) {
   .app-shell {
-    padding: 22px;
+    padding: 28px;
   }
 
   .console-grid {
-    grid-template-columns: 320px minmax(0, 1fr);
+    grid-template-columns: 300px minmax(0, 1fr);
     align-items: start;
+    gap: 24px;
   }
 
   .pool-panel {
@@ -513,6 +560,11 @@ body {
 @media (max-width: 560px) {
   .topbar {
     align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .pool-summary {
+    align-items: stretch;
     flex-direction: column;
   }
 

@@ -129,7 +129,7 @@ export function RecoveryDashboard({
       </header>
 
       <main className="console-grid">
-        <section className="panel pool-panel" aria-label="Owned pools">
+        <section className="pool-panel" aria-label="Owned pools">
           <div className="panel-head">
             <div>
               <h2>Pools</h2>
@@ -181,13 +181,15 @@ export function RecoveryDashboard({
           )}
         </section>
 
-        <section className="panel detail-panel" aria-label="Pool recovery">
-          <div className="panel-head detail-head">
+        <section className="detail-panel" aria-label="Pool recovery">
+          <div className="pool-summary">
             <div>
               <h2 title={selectedPool ? `Pool #${selectedPool.tokenIdText}` : undefined}>
                 {selectedPool ? `Pool #${shortTokenId(selectedPool.tokenIdText)}` : 'Select pool'}
               </h2>
-              <span>{selectedPool ? selectedPool.address : 'NO POOL SELECTED'}</span>
+              <span title={selectedPool ? selectedPool.address : undefined}>
+                {selectedPool ? shortAddress(selectedPool.address) : 'NO POOL SELECTED'}
+              </span>
             </div>
             <button type="button" className="action-button" onClick={onRecoverAll} disabled={!canRecoverAll}>
               Recover all
@@ -305,7 +307,7 @@ export function RecoveryDashboard({
                         </div>
                         <button
                           type="button"
-                          className="action-button small"
+                          className={term.actionKind === 'none' ? 'ghost-button small' : 'action-button small'}
                           onClick={() => onRecoverTerm(term)}
                           disabled={isBusy || term.actionKind === 'none'}
                         >
