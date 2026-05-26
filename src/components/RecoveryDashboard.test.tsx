@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 import type { Address } from 'viem'
@@ -90,6 +90,16 @@ describe('RecoveryDashboard', () => {
     renderDashboard({ walletAddress: undefined, pools: [], selectedPool: undefined })
     expect(screen.getByRole('heading', { name: 'veDelegate.vet Pool Recovery' })).toBeInTheDocument()
     expect(screen.getByText('CONNECT WALLET')).toBeInTheDocument()
+  })
+
+  it('places the wallet control above pool selection in the sidebar', () => {
+    const view = renderDashboard()
+    const poolPanel = screen.getByLabelText('Owned pools')
+    const sidebarWallet = poolPanel.querySelector('.sidebar-wallet')
+
+    expect(sidebarWallet).toContainElement(within(poolPanel).getByRole('button', { name: 'Wallet' }))
+    expect(Array.from(poolPanel.children)[0]).toBe(sidebarWallet)
+    expect(view.container.querySelector('.topbar .sidebar-wallet')).not.toBeInTheDocument()
   })
 
   it('renders owned pool list', () => {

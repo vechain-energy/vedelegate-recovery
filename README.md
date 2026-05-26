@@ -57,7 +57,7 @@ GM NFTs are read from the VeBetterDAO GalaxyMember contract. If a GM NFT has a n
 
 ## Wallet UI
 
-The header uses local connect and connected-wallet buttons that open VeChain Kit modals through Kit hooks. Social and wallet login options stay enabled through VeChain Kit. VeChain Kit dark mode is enabled through the provider. Recovery console styles and theme tokens are scoped under `.app-shell`; the only global page styles are body margin reset and the `#root` backdrop. No custom VeChain Kit theme variables or modal CSS overrides are set. Generic send, swap, and receive quick actions are hidden.
+The pool sidebar uses VeChain Kit's reusable `WalletButton` above the pool selector. Social and wallet login options stay enabled through VeChain Kit. VeChain Kit dark mode is enabled through the provider. Recovery console styles and theme tokens are scoped under `.app-shell`; the only global page styles are body margin reset and the `#root` backdrop. No custom VeChain Kit theme variables or modal CSS overrides are set. Generic send, swap, and receive quick actions are hidden.
 
 ## Interface Style
 

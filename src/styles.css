@@ -54,7 +54,7 @@ body {
 .topbar {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
   gap: 18px;
   padding: 14px 0 26px;
 }
@@ -98,16 +98,19 @@ body {
   text-transform: uppercase;
 }
 
-.wallet-zone {
+.sidebar-wallet {
   display: flex;
-  flex: 0 0 auto;
-  justify-content: flex-end;
-  max-width: min(320px, 42vw);
+  justify-content: flex-start;
+  width: 100%;
+  padding: 0 2px 18px;
   min-width: 0;
 }
 
-.demo-wallet,
-.wallet-connect-button {
+.sidebar-wallet > * {
+  max-width: 100%;
+}
+
+.demo-wallet {
   border: 1px solid var(--line-hot);
   border-radius: 6px;
   min-height: 38px;
@@ -118,69 +121,6 @@ body {
   font-weight: 780;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-}
-
-.wallet-connect-button {
-  cursor: pointer;
-}
-
-.wallet-connect-button:hover:not(:disabled) {
-  background: var(--orange-soft);
-}
-
-.wallet-chip {
-  display: grid;
-  grid-template-columns: 32px minmax(0, 1fr);
-  align-items: center;
-  gap: 10px;
-  width: min(100%, 260px);
-  min-height: 46px;
-  border: 1px solid var(--line-hot);
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.03);
-  color: var(--text);
-  padding: 6px 10px;
-  cursor: pointer;
-  text-align: left;
-}
-
-.wallet-chip:hover {
-  background: var(--orange-soft);
-}
-
-.wallet-chip-image {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  border: 1px solid var(--line);
-  object-fit: cover;
-}
-
-.wallet-chip-text {
-  display: grid;
-  gap: 2px;
-  min-width: 0;
-}
-
-.wallet-chip-text strong,
-.wallet-chip-text code {
-  display: block;
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.wallet-chip-text strong {
-  color: var(--text);
-  font-size: 0.82rem;
-  font-weight: 780;
-  line-height: 1.1;
-}
-
-.wallet-chip-text code {
-  color: var(--muted);
-  font-size: 0.7rem;
 }
 
 .console-grid {
@@ -824,13 +764,9 @@ body {
     flex-direction: column;
   }
 
-  .wallet-zone,
-  .wallet-zone button {
+  .sidebar-wallet,
+  .sidebar-wallet button {
     width: 100%;
-  }
-
-  .wallet-zone {
-    max-width: 100%;
   }
 
   .tx-modal-actions {

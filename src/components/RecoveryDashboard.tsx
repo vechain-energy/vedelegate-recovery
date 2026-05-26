@@ -125,11 +125,12 @@ export function RecoveryDashboard({
             <div className="brand-subline">{networkLabel.toUpperCase()} / SMART WALLET EXIT</div>
           </div>
         </div>
-        <div className="wallet-zone">{walletControl}</div>
       </header>
 
       <main className="console-grid">
         <section className="pool-panel" aria-label="Owned pools">
+          <div className="sidebar-wallet">{walletControl}</div>
+
           <div className="panel-head">
             <div>
               <h2>Pools</h2>

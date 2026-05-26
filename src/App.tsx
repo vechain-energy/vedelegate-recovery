@@ -112,7 +112,7 @@ function RecoveryApp() {
       <RecoveryDashboard
         logoUrl={logoUrl}
         walletAddress={walletAddress}
-        walletControl={<HeaderWalletControl isDemoMode={isDemoMode} logoUrl={logoUrl} />}
+        walletControl={<HeaderWalletControl isDemoMode={isDemoMode} />}
         networkLabel={appConfig.network}
         pools={pools}
         selectedPool={selectedPool}
