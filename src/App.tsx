@@ -1,8 +1,9 @@
 import { useEffect, useMemo, useState } from 'react'
 import { QueryClient, QueryClientProvider, useQueryClient } from '@tanstack/react-query'
-import { VeChainKitProvider, WalletButton, useWallet, type VechainKitProviderProps } from '@vechain/vechain-kit'
+import { VeChainKitProvider, useWallet, type VechainKitProviderProps } from '@vechain/vechain-kit'
 import { isAddress } from 'viem'
 import { appConfig } from './config'
+import { HeaderWalletControl } from './components/HeaderWalletControl'
 import { RecoveryDashboard } from './components/RecoveryDashboard'
 import { useLockedTerms, useOwnedPools, usePoolAssets, useTokenList } from './hooks/useRecoveryQueries'
 import { useRecoveryActions } from './hooks/useRecoveryActions'
@@ -44,9 +45,12 @@ const loginMethods: VechainKitProviderProps['loginMethods'] = [
   { method: 'dappkit', gridColumn: 4 },
 ]
 
+const hiddenQuickActions: NonNullable<VechainKitProviderProps['hiddenQuickActions']> = ['send', 'swap', 'receive']
+
 function RecoveryApp() {
   const { account } = useWallet()
   const queryClientInstance = useQueryClient()
+  const logoUrl = `${import.meta.env.BASE_URL}logo.png`
   const demoMode = appConfig.enableDemoData ? new URLSearchParams(window.location.search).get('demo') : undefined
   const isDemoBalances = demoMode === 'balances'
   const isDemoScanning = demoMode === 'scanning'
@@ -102,17 +106,9 @@ function RecoveryApp() {
   return (
     <>
       <RecoveryDashboard
-        logoUrl={`${import.meta.env.BASE_URL}logo.png`}
+        logoUrl={logoUrl}
         walletAddress={walletAddress}
-        walletControl={
-          isDemoMode ? (
-            <button type="button" className="demo-wallet" disabled>
-              Demo wallet
-            </button>
-          ) : (
-            <WalletButton />
-          )
-        }
+        walletControl={<HeaderWalletControl isDemoMode={isDemoMode} logoUrl={logoUrl} />}
         networkLabel={appConfig.network}
         pools={pools}
         selectedPool={selectedPool}
@@ -182,6 +178,7 @@ export default function App() {
           logo: `${import.meta.env.BASE_URL}logo.png`,
           description: 'Recover VeDelegate pool funds.',
         }}
+        hiddenQuickActions={hiddenQuickActions}
         darkMode
       >
         <RecoveryApp />

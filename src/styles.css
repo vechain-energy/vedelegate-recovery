@@ -12,14 +12,10 @@
   --orange-soft: rgba(249, 115, 22, 0.12);
   --green: #74d27a;
   --shadow: rgba(0, 0, 0, 0.42);
-  font-family:
-    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-    sans-serif;
-  background: var(--bg);
-  color: var(--text);
 }
 
-* {
+.app-shell,
+.app-shell * {
   box-sizing: border-box;
 }
 
@@ -32,11 +28,11 @@ body {
     linear-gradient(180deg, #0c1015 0%, #080a0d 55%, #050607 100%);
 }
 
-button {
+.app-shell button {
   font: inherit;
 }
 
-code {
+.app-shell code {
   font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
 }
 
@@ -44,6 +40,10 @@ code {
   width: min(1220px, 100%);
   margin: 0 auto;
   padding: 14px;
+  color: var(--text);
+  font-family:
+    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
 }
 
 .topbar {
@@ -93,10 +93,15 @@ code {
 }
 
 .wallet-zone {
+  display: flex;
   flex: 0 0 auto;
+  justify-content: flex-end;
+  max-width: min(320px, 42vw);
+  min-width: 0;
 }
 
-.demo-wallet {
+.demo-wallet,
+.wallet-connect-button {
   border: 1px solid var(--line-hot);
   border-radius: 2px;
   min-height: 38px;
@@ -107,6 +112,69 @@ code {
   font-weight: 780;
   letter-spacing: 0.04em;
   text-transform: uppercase;
+}
+
+.wallet-connect-button {
+  cursor: pointer;
+}
+
+.wallet-connect-button:hover:not(:disabled) {
+  background: var(--orange-soft);
+}
+
+.wallet-chip {
+  display: grid;
+  grid-template-columns: 32px minmax(0, 1fr);
+  align-items: center;
+  gap: 10px;
+  width: min(100%, 260px);
+  min-height: 46px;
+  border: 1px solid var(--line-hot);
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--text);
+  padding: 6px 10px;
+  cursor: pointer;
+  text-align: left;
+}
+
+.wallet-chip:hover {
+  background: var(--orange-soft);
+}
+
+.wallet-chip-image {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  object-fit: cover;
+}
+
+.wallet-chip-text {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.wallet-chip-text strong,
+.wallet-chip-text code {
+  display: block;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.wallet-chip-text strong {
+  color: var(--text);
+  font-size: 0.82rem;
+  font-weight: 780;
+  line-height: 1.1;
+}
+
+.wallet-chip-text code {
+  color: var(--muted);
+  font-size: 0.7rem;
 }
 
 .console-grid {
@@ -451,6 +519,10 @@ code {
   .wallet-zone,
   .wallet-zone button {
     width: 100%;
+  }
+
+  .wallet-zone {
+    max-width: 100%;
   }
 }
 

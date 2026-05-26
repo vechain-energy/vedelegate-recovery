@@ -48,6 +48,10 @@ All recovery calls execute through the user's pool smart wallet. The signer rema
 
 Closing an ended auto-renew term first disables auto-renew, then closes, then withdraws term funds into the owner pool. After that, recover B3TR from the pool.
 
+## Wallet UI
+
+The header uses local connect and connected-wallet buttons that open VeChain Kit modals through Kit hooks. Recovery console styles are scoped under `.app-shell` so they do not override VeChain Kit or Chakra modal styles. Generic send, swap, and receive quick actions are hidden.
+
 ## Demo Fixtures
 
 For screenshots without a wallet, run with demo data enabled:
