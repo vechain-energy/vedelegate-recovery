@@ -12,11 +12,11 @@ https://vechain-energy.github.io/vedelegate-recovery/
 
 ## Demo Video
 
-This demo uses local fixture data, skips wallet connection, and stops at the signing preview.
+This animated demo uses local fixture data, skips wallet connection, and stops at the signing preview.
 
-<video src="docs/videos/recovery-demo.mp4" controls muted playsinline width="100%"></video>
+![Recovery demo](docs/videos/recovery-demo.gif)
 
-[Open recovery demo video](docs/videos/recovery-demo.mp4)
+[Open recovery demo GIF](docs/videos/recovery-demo.gif)
 
 ## What It Recovers
 
