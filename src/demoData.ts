@@ -7,6 +7,7 @@ export const demoWalletAddress = '0xA11CE00000000000000000000000000000000000' as
 export const demoB3trAddress = '0x5ef79995FE8a89e0812330E4378eB2660ceDe699' as Address
 export const demoVot3Address = '0x76Ca782B59C74d088C7D2Cce2f211BC00836c602' as Address
 export const demoVeb3trAddress = '0x420dFe6B7Bc605Ce61E9839c8c0E745870A6CDE0' as Address
+export const demoGalaxyMemberAddress = '0x93B8cD34A7Fc4f53271b9011161F7A2B5fEA9D1F' as Address
 const demoShaAddress = '0x5db3c8a942333f6468176a870db36eef120a34dc' as Address
 const demoOceanAddress = '0x0ce6661b4ba86a0ea7ca2bd86a0de87b0b860f14' as Address
 export const demoLongPoolTokenId = 1234567890123456789012345678901234567890n
@@ -85,12 +86,33 @@ export const demoAssets: PoolAssetSnapshot = {
       balance: 0n,
     },
   ],
+  gmNfts: [
+    {
+      tokenId: 8102n,
+      tokenIdText: '8102',
+      level: 7n,
+      tokenUri: 'ipfs://bafybeib5gmpv7koo4hc62qveyflpdptxosxef5jqrw2uxa2og7jrbvo4qu/metadata.json',
+      imageUrl: 'https://ipfs.io/ipfs/bafybeib5gmpv7koo4hc62qveyflpdptxosxef5jqrw2uxa2og7jrbvo4qu',
+      nodeIdAttached: 4201n,
+      isAttachedToNode: true,
+    },
+    {
+      tokenId: 8103n,
+      tokenIdText: '8103',
+      level: 1n,
+      tokenUri: 'ipfs://bafybeig7g76wa4maelsy3yusawb2nfhk26b7seafeun3x3tmvgp5bols3e/metadata.json',
+      imageUrl: 'https://ipfs.io/ipfs/bafybeig7g76wa4maelsy3yusawb2nfhk26b7seafeun3x3tmvgp5bols3e',
+      nodeIdAttached: 0n,
+      isAttachedToNode: false,
+    },
+  ],
 }
 
 const demoEmptyAssets: PoolAssetSnapshot = {
   poolAddress: demoPools[1]?.address ?? ('0x0000000000000000000000000000000000000000' as Address),
   vetBalance: 0n,
   tokenBalances: [],
+  gmNfts: [],
 }
 
 const termPoolAddress = '0x7000000000000000000000000000000000000088' as Address

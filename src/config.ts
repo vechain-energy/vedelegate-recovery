@@ -15,6 +15,7 @@ export type AppConfig = {
     vot3: Address
     veB3TR: Address
     lockedTerms: Address
+    galaxyMember: Address
   }
 }
 
@@ -25,6 +26,7 @@ const DEFAULTS = {
   vot3: '0x76Ca782B59C74d088C7D2Cce2f211BC00836c602',
   veB3TR: '0x420dFe6B7Bc605Ce61E9839c8c0E745870A6CDE0',
   lockedTerms: '0x807496420F89fF2AbF2e97C3AaA0886d6881dB8B',
+  galaxyMember: '0x93B8cD34A7Fc4f53271b9011161F7A2B5fEA9D1F',
 } as const
 
 const normalizeNetwork = (value: string | undefined): NetworkType => {
@@ -59,5 +61,10 @@ export const appConfig: AppConfig = {
     vot3: getAddressEnv(import.meta.env.VITE_VOT3_ADDRESS, DEFAULTS.vot3, 'VITE_VOT3_ADDRESS'),
     veB3TR: getAddressEnv(import.meta.env.VITE_VEB3TR_ADDRESS, DEFAULTS.veB3TR, 'VITE_VEB3TR_ADDRESS'),
     lockedTerms: getAddressEnv(import.meta.env.VITE_LOCKED_TERMS_ADDRESS, DEFAULTS.lockedTerms, 'VITE_LOCKED_TERMS_ADDRESS'),
+    galaxyMember: getAddressEnv(
+      import.meta.env.VITE_GALAXY_MEMBER_ADDRESS,
+      DEFAULTS.galaxyMember,
+      'VITE_GALAXY_MEMBER_ADDRESS',
+    ),
   },
 }

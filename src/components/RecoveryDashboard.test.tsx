@@ -40,6 +40,17 @@ const assets: PoolAssetSnapshot = {
       balance: 0n,
     },
   ],
+  gmNfts: [
+    {
+      tokenId: 12n,
+      tokenIdText: '12',
+      level: 7n,
+      tokenUri: 'ipfs://metadata',
+      imageUrl: 'https://ipfs.io/ipfs/gm-image',
+      nodeIdAttached: 777n,
+      isAttachedToNode: true,
+    },
+  ],
 }
 
 const terms: LockedTerm[] = []
@@ -66,6 +77,7 @@ const renderDashboard = (overrides: Partial<React.ComponentProps<typeof Recovery
       onRefresh={vi.fn()}
       onRecoverVet={vi.fn()}
       onRecoverToken={vi.fn()}
+      onRecoverGmNft={vi.fn()}
       onConvertVot3={vi.fn()}
       onRecoverAll={vi.fn()}
       onRecoverTerm={vi.fn()}
@@ -91,6 +103,15 @@ describe('RecoveryDashboard', () => {
     renderDashboard()
     expect(screen.getAllByText('B3TR')).not.toHaveLength(0)
     expect(screen.queryByText('VOT3')).not.toBeInTheDocument()
+  })
+
+  it('renders GM NFT rows and conditional detach action', () => {
+    renderDashboard()
+
+    expect(screen.getByText('GM #12')).toBeInTheDocument()
+    expect(screen.getByText('LEVEL 7')).toBeInTheDocument()
+    expect(screen.getByText('NODE #777')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Detach + withdraw' })).toBeInTheDocument()
   })
 
   it('disables action buttons while pending', async () => {
@@ -137,6 +158,7 @@ describe('RecoveryDashboard', () => {
     expect(screen.getAllByText('VOT3')).not.toHaveLength(0)
     expect(screen.getAllByText('veB3TR')).not.toHaveLength(0)
     expect(screen.getAllByText('SHA')).not.toHaveLength(0)
+    expect(screen.getByText('GM #8102')).toBeInTheDocument()
     expect(screen.queryByText('OCE')).not.toBeInTheDocument()
     expect(screen.getAllByRole('button', { name: 'Close + withdraw' })).toHaveLength(2)
     expect(screen.getByRole('button', { name: 'Withdraw term' })).toBeInTheDocument()

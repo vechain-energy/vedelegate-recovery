@@ -2,7 +2,7 @@
 
 Static VeDelegate recovery console for GitHub Pages.
 
-Users connect with VeChain Kit, scan owned VeDelegate pools, withdraw VET and registry token balances, convert VOT3 back to B3TR, and close ended Lock-2-Earn terms.
+Users connect with VeChain Kit, scan owned VeDelegate pools, withdraw VET, registry token balances, and GM NFTs, convert VOT3 back to B3TR, and close ended Lock-2-Earn terms.
 
 ## Run
 
@@ -31,6 +31,7 @@ Copy `.env.example` to `.env` when overrides are needed:
 - `VITE_VOT3_ADDRESS`
 - `VITE_VEB3TR_ADDRESS`
 - `VITE_LOCKED_TERMS_ADDRESS`
+- `VITE_GALAXY_MEMBER_ADDRESS`
 - `VITE_WALLET_CONNECT_PROJECT_ID`
 - `VITE_DELEGATION_URL`
 - `VITE_BASE_PATH`
@@ -47,6 +48,8 @@ Vite base path uses `VITE_BASE_PATH` first, then the GitHub repository name in A
 All recovery calls execute through the user's pool smart wallet. The signer remains the owner wallet. Recover-all is a multi-clause transaction: all clauses succeed or all fail.
 
 Closing an ended auto-renew term first disables auto-renew, then closes, then withdraws term funds into the owner pool. After that, recover B3TR from the pool.
+
+GM NFTs are read from the VeBetterDAO GalaxyMember contract. If a GM NFT has a node attached, recovery first calls `detachNode(nodeId, gmTokenId)` from the pool and then transfers the NFT. If no node is attached, only the NFT transfer is built.
 
 ## Wallet UI
 
@@ -66,4 +69,4 @@ VITE_ENABLE_DEMO_DATA=true npm run dev
 
 Open `/?demo=balances` for populated pools or `/?demo=scanning` for the scan loading state.
 
-The fixture covers multi-pool selection, VET, B3TR, VOT3, veB3TR, a registry token, hidden zero balances, ended terms with and without auto-renew, a locked active term, a closed funded term, and a closed empty term.
+The fixture covers multi-pool selection, VET, B3TR, VOT3, veB3TR, a registry token, hidden zero balances, GM NFTs with and without attached nodes, ended terms with and without auto-renew, a locked active term, a closed funded term, and a closed empty term.

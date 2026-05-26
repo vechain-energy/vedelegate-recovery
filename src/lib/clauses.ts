@@ -1,8 +1,8 @@
 import { encodeFunctionData, type Address, type Hex } from 'viem'
-import { erc20Abi, lockedTermsAbi, poolExecuteAbi, vot3Abi } from '../abis'
+import { erc20Abi, galaxyMemberAbi, lockedTermsAbi, poolExecuteAbi, vot3Abi } from '../abis'
 import type { AppConfig } from '../config'
 import { sameAddress } from './format'
-import type { PoolTokenBalance } from './pools'
+import type { PoolGmNft, PoolTokenBalance } from './pools'
 
 export type RecoveryClause = {
   to: Address
@@ -18,6 +18,7 @@ export type RecoverAllInput = {
   ownerAddress: Address
   vetBalance: bigint
   tokenBalances: readonly PoolTokenBalance[]
+  gmNfts: readonly PoolGmNft[]
 }
 
 export type TermActionInput = {
@@ -88,12 +89,65 @@ export const buildConvertVot3Clause = (
   return buildPoolExecuteClause(poolAddress, config.addresses.vot3, 0n, convertData, 'Convert VOT3 to B3TR')
 }
 
+const buildDetachGmNodeClause = (
+  config: AppConfig,
+  poolAddress: Address,
+  gmNft: PoolGmNft,
+): RecoveryClause =>
+  buildPoolExecuteClause(
+    poolAddress,
+    config.addresses.galaxyMember,
+    0n,
+    encodeFunctionData({
+      abi: galaxyMemberAbi,
+      functionName: 'detachNode',
+      args: [gmNft.nodeIdAttached, gmNft.tokenId],
+    }),
+    `Detach node ${gmNft.nodeIdAttached.toString()} from GM ${gmNft.tokenIdText}`,
+  )
+
+const buildTransferGmNftClause = (
+  config: AppConfig,
+  poolAddress: Address,
+  ownerAddress: Address,
+  gmNft: PoolGmNft,
+): RecoveryClause =>
+  buildPoolExecuteClause(
+    poolAddress,
+    config.addresses.galaxyMember,
+    0n,
+    encodeFunctionData({
+      abi: galaxyMemberAbi,
+      functionName: 'safeTransferFrom',
+      args: [poolAddress, ownerAddress, gmNft.tokenId],
+    }),
+    `Withdraw GM ${gmNft.tokenIdText}`,
+  )
+
+export const buildWithdrawGmNftClauses = (
+  config: AppConfig,
+  poolAddress: Address,
+  ownerAddress: Address,
+  gmNft: PoolGmNft,
+): RecoveryClause[] => {
+  const clauses: RecoveryClause[] = []
+
+  if (gmNft.nodeIdAttached > 0n) {
+    clauses.push(buildDetachGmNodeClause(config, poolAddress, gmNft))
+  }
+
+  clauses.push(buildTransferGmNftClause(config, poolAddress, ownerAddress, gmNft))
+
+  return clauses
+}
+
 export const buildRecoverAllClauses = ({
   config,
   poolAddress,
   ownerAddress,
   vetBalance,
   tokenBalances,
+  gmNfts,
 }: RecoverAllInput): RecoveryClause[] => {
   const clauses: RecoveryClause[] = []
   const b3trBalance = tokenBalances.find((item) => sameAddress(item.token.address, config.addresses.b3tr))?.balance ?? 0n
@@ -137,6 +191,10 @@ export const buildRecoverAllClauses = ({
         item.token.symbol,
       ),
     )
+  })
+
+  gmNfts.forEach((gmNft) => {
+    clauses.push(...buildWithdrawGmNftClauses(config, poolAddress, ownerAddress, gmNft))
   })
 
   return clauses

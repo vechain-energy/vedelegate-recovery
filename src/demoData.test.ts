@@ -24,6 +24,13 @@ describe('demo data', () => {
     expect(balances.get('OCE')?.balance).toBe(0n)
   })
 
+  it('covers GM NFT transfer scenarios', () => {
+    expect(demoAssets.gmNfts).toHaveLength(2)
+    expect(demoAssets.gmNfts.some((nft) => nft.isAttachedToNode && nft.nodeIdAttached > 0n)).toBe(true)
+    expect(demoAssets.gmNfts.some((nft) => !nft.isAttachedToNode && nft.nodeIdAttached === 0n)).toBe(true)
+    expect(demoAssets.gmNfts.every((nft) => nft.imageUrl?.startsWith('https://ipfs.io/ipfs/'))).toBe(true)
+  })
+
   it('covers locked term action scenarios', () => {
     expect(demoTerms.map((term) => term.status)).toEqual([
       'ended',

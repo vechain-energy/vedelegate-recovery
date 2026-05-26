@@ -31,3 +31,13 @@ export const lockedTermsAbi = parseAbi([
   'function closeTerm(uint256 tokenId)',
   'function withdrawFundsFrom(uint256 tokenId)',
 ])
+
+export const galaxyMemberAbi = parseAbi([
+  'function balanceOf(address owner) view returns (uint256)',
+  'function tokenOfOwnerByIndex(address owner, uint256 index) view returns (uint256)',
+  'function levelOf(uint256 tokenId) view returns (uint256)',
+  'function tokenURI(uint256 tokenId) view returns (string)',
+  'function getNodeIdAttached(uint256 tokenId) view returns (uint256)',
+  'function detachNode(uint256 nodeTokenId, uint256 tokenId)',
+  'function safeTransferFrom(address from, address to, uint256 tokenId)',
+])

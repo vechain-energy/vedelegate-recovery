@@ -2,7 +2,7 @@ import type { ReactNode } from 'react'
 import type { Address } from 'viem'
 import { formatDateTime, formatTokenAmount, shortAddress, sameAddress } from '../lib/format'
 import type { LockedTerm } from '../lib/lockedTerms'
-import type { PoolAssetSnapshot, PoolInfo, PoolTokenBalance } from '../lib/pools'
+import type { PoolAssetSnapshot, PoolGmNft, PoolInfo, PoolTokenBalance } from '../lib/pools'
 
 type RecoveryDashboardProps = {
   logoUrl: string
@@ -25,6 +25,7 @@ type RecoveryDashboardProps = {
   onRefresh: () => void
   onRecoverVet: () => void
   onRecoverToken: (tokenBalance: PoolTokenBalance) => void
+  onRecoverGmNft: (gmNft: PoolGmNft) => void
   onConvertVot3: (tokenBalance: PoolTokenBalance) => void
   onRecoverAll: () => void
   onRecoverTerm: (term: LockedTerm) => void
@@ -36,6 +37,10 @@ const hasLiquidFunds = (assets?: PoolAssetSnapshot) => {
   }
   return assets.vetBalance > 0n || assets.tokenBalances.some((item) => item.balance > 0n)
 }
+
+const hasRecoverableAssets = (assets?: PoolAssetSnapshot) => hasLiquidFunds(assets) || Boolean(assets?.gmNfts.length)
+
+const hasAttachedNode = (gmNft: PoolGmNft) => gmNft.nodeIdAttached > 0n
 
 const statusLabel = (term: LockedTerm) => {
   switch (term.status) {
@@ -108,12 +113,14 @@ export function RecoveryDashboard({
   onRefresh,
   onRecoverVet,
   onRecoverToken,
+  onRecoverGmNft,
   onConvertVot3,
   onRecoverAll,
   onRecoverTerm,
 }: RecoveryDashboardProps) {
   const tokenBalances = assets?.tokenBalances.filter((item) => item.balance > 0n) ?? []
-  const canRecoverAll = hasLiquidFunds(assets) && !isBusy
+  const gmNfts = assets?.gmNfts ?? []
+  const canRecoverAll = hasRecoverableAssets(assets) && !isBusy
 
   return (
     <div className="app-shell">
@@ -261,6 +268,46 @@ export function RecoveryDashboard({
                               Withdraw
                             </button>
                           )}
+                        </div>
+                      )
+                    })}
+                  </div>
+                )}
+              </div>
+
+              <div className="section-block">
+                <div className="section-title">
+                  <span>GM NFTs</span>
+                  {isAssetsLoading ? <em>LOADING</em> : <em>{gmNfts.length} NFTS</em>}
+                </div>
+
+                {isAssetsLoading ? (
+                  <div className="empty-state compact">READING GM NFTS</div>
+                ) : gmNfts.length === 0 ? (
+                  <div className="empty-state compact">NO GM NFT OWNED BY POOL</div>
+                ) : (
+                  <div className="asset-table">
+                    {gmNfts.map((gmNft) => {
+                      const isNodeAttached = hasAttachedNode(gmNft)
+
+                      return (
+                        <div className="asset-row" key={gmNft.tokenIdText}>
+                          <div className="asset-name">
+                            <TokenMark symbol="GM" iconUrl={gmNft.imageUrl} />
+                            <span>
+                              <strong>GM #{shortTokenId(gmNft.tokenIdText)}</strong>
+                              <small>LEVEL {gmNft.level.toString()}</small>
+                            </span>
+                          </div>
+                          <code>{isNodeAttached ? `NODE #${shortTokenId(gmNft.nodeIdAttached.toString())}` : 'READY'}</code>
+                          <button
+                            type="button"
+                            className="action-button small"
+                            onClick={() => onRecoverGmNft(gmNft)}
+                            disabled={isBusy}
+                          >
+                            {isNodeAttached ? 'Detach + withdraw' : 'Withdraw'}
+                          </button>
                         </div>
                       )
                     })}

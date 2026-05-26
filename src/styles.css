@@ -455,6 +455,7 @@ body {
   width: 28px;
   height: 28px;
   border-radius: 50%;
+  object-fit: cover;
   background: #0b0d11;
   border: 1px solid var(--line);
 }

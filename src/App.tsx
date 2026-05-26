@@ -133,6 +133,12 @@ function RecoveryApp() {
           }
           void actions.recoverToken(selectedPool.address, walletAddress, item)
         }}
+        onRecoverGmNft={(item) => {
+          if (!walletAddress || !selectedPool || isDemoMode) {
+            return
+          }
+          void actions.recoverGmNft(selectedPool.address, walletAddress, item)
+        }}
         onConvertVot3={(item) => {
           if (!selectedPool || isDemoMode) {
             return

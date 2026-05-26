@@ -6,12 +6,13 @@ import {
   buildConvertVot3Clause,
   buildRecoverAllClauses,
   buildTermActionClauses,
+  buildWithdrawGmNftClauses,
   buildWithdrawTokenClause,
   buildWithdrawVetClause,
   type RecoveryClause,
 } from '../lib/clauses'
 import type { LockedTerm } from '../lib/lockedTerms'
-import type { PoolAssetSnapshot, PoolTokenBalance } from '../lib/pools'
+import type { PoolAssetSnapshot, PoolGmNft, PoolTokenBalance } from '../lib/pools'
 
 export type RecoveryActions = {
   isBusy: boolean
@@ -19,6 +20,7 @@ export type RecoveryActions = {
   modal: React.ReactNode
   recoverVet: (poolAddress: Address, ownerAddress: Address, amount: bigint) => Promise<void>
   recoverToken: (poolAddress: Address, ownerAddress: Address, tokenBalance: PoolTokenBalance) => Promise<void>
+  recoverGmNft: (poolAddress: Address, ownerAddress: Address, gmNft: PoolGmNft) => Promise<void>
   convertVot3: (poolAddress: Address, amount: bigint) => Promise<void>
   recoverAll: (poolAddress: Address, ownerAddress: Address, assets: PoolAssetSnapshot) => Promise<void>
   recoverTerm: (poolAddress: Address, term: LockedTerm) => Promise<void>
@@ -89,6 +91,8 @@ export const useRecoveryActions = (config: AppConfig, ownerAddress?: Address): R
         ],
         `Withdraw ${tokenBalance.token.symbol}`,
       ),
+    recoverGmNft: (poolAddress, targetAddress, gmNft) =>
+      sendClauses(buildWithdrawGmNftClauses(config, poolAddress, targetAddress, gmNft), `Withdraw GM ${gmNft.tokenIdText}`),
     convertVot3: (poolAddress, amount) =>
       sendClauses([buildConvertVot3Clause(config, poolAddress, amount)], 'Convert VOT3 to B3TR'),
     recoverAll: (poolAddress, targetAddress, assets) =>
@@ -99,8 +103,9 @@ export const useRecoveryActions = (config: AppConfig, ownerAddress?: Address): R
           ownerAddress: targetAddress,
           vetBalance: assets.vetBalance,
           tokenBalances: assets.tokenBalances,
+          gmNfts: assets.gmNfts,
         }),
-        'Recover liquid funds',
+        'Recover pool assets',
       ),
     recoverTerm: (poolAddress, term) =>
       sendClauses(
