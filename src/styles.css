@@ -179,6 +179,23 @@ code {
   background: var(--orange-soft);
 }
 
+.scan-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-width: 64px;
+}
+
+.button-spinner {
+  width: 12px;
+  height: 12px;
+  border: 2px solid rgba(249, 115, 22, 0.24);
+  border-top-color: var(--orange);
+  border-radius: 50%;
+  animation: spin 0.72s linear infinite;
+}
+
 .action-button.small,
 .ghost-button.small {
   min-height: 30px;
@@ -190,6 +207,10 @@ code {
 .ghost-button:disabled {
   opacity: 0.42;
   cursor: not-allowed;
+}
+
+.scan-button[aria-busy="true"]:disabled {
+  opacity: 1;
 }
 
 .empty-state {
@@ -430,5 +451,11 @@ code {
   .wallet-zone,
   .wallet-zone button {
     width: 100%;
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
   }
 }

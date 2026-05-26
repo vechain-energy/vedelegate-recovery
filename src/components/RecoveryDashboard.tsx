@@ -135,8 +135,16 @@ export function RecoveryDashboard({
               <h2>Pools</h2>
               <span>{walletAddress ? shortAddress(walletAddress) : 'NO WALLET'}</span>
             </div>
-            <button type="button" className="ghost-button" onClick={onRefresh} disabled={!walletAddress || isBusy}>
-              Scan
+            <button
+              type="button"
+              className="ghost-button scan-button"
+              onClick={onRefresh}
+              disabled={!walletAddress || isBusy || isPoolsLoading}
+              aria-busy={isPoolsLoading}
+              aria-label={isPoolsLoading ? 'Scanning pools' : 'Scan'}
+            >
+              {isPoolsLoading ? <span className="button-spinner" aria-hidden="true" /> : null}
+              <span>{isPoolsLoading ? 'Scanning' : 'Scan'}</span>
             </button>
           </div>
 

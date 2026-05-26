@@ -102,6 +102,20 @@ describe('RecoveryDashboard', () => {
     expect(onRecoverAll).not.toHaveBeenCalled()
   })
 
+  it('shows scan loading indicator while scanning pools', async () => {
+    const user = userEvent.setup()
+    const onRefresh = vi.fn()
+    const view = renderDashboard({ isPoolsLoading: true, onRefresh })
+
+    const button = screen.getByRole('button', { name: 'Scanning pools' })
+    expect(button).toBeDisabled()
+    expect(button).toHaveAttribute('aria-busy', 'true')
+    expect(view.container.querySelector('.button-spinner')).toBeInTheDocument()
+
+    await user.click(button)
+    expect(onRefresh).not.toHaveBeenCalled()
+  })
+
   it('renders demo balances and term actions', () => {
     const view = renderDashboard({
       pools: demoPools,

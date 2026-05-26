@@ -34,7 +34,7 @@ Copy `.env.example` to `.env` when overrides are needed:
 - `VITE_WALLET_CONNECT_PROJECT_ID`
 - `VITE_DELEGATION_URL`
 - `VITE_BASE_PATH`
-- `VITE_ENABLE_DEMO_DATA`: set `true` to enable `?demo=balances` local fixture screenshots
+- `VITE_ENABLE_DEMO_DATA`: set `true` to enable local fixture screenshots with `?demo=balances` and `?demo=scanning`
 
 ## GitHub Pages
 
@@ -56,6 +56,6 @@ For screenshots without a wallet, run with demo data enabled:
 VITE_ENABLE_DEMO_DATA=true npm run dev
 ```
 
-Open `/?demo=balances`.
+Open `/?demo=balances` for populated pools or `/?demo=scanning` for the scan loading state.
 
 The fixture covers multi-pool selection, VET, B3TR, VOT3, veB3TR, a registry token, hidden zero balances, ended terms with and without auto-renew, a locked active term, a closed funded term, and a closed empty term.

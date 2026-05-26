@@ -47,14 +47,17 @@ const loginMethods: VechainKitProviderProps['loginMethods'] = [
 function RecoveryApp() {
   const { account } = useWallet()
   const queryClientInstance = useQueryClient()
-  const isDemoMode = appConfig.enableDemoData && new URLSearchParams(window.location.search).get('demo') === 'balances'
+  const demoMode = appConfig.enableDemoData ? new URLSearchParams(window.location.search).get('demo') : undefined
+  const isDemoBalances = demoMode === 'balances'
+  const isDemoScanning = demoMode === 'scanning'
+  const isDemoMode = isDemoBalances || isDemoScanning
   const connectedWalletAddress = account?.address && isAddress(account.address) ? account.address : undefined
   const walletAddress = isDemoMode ? demoWalletAddress : connectedWalletAddress
   const [selectedPoolTokenId, setSelectedPoolTokenId] = useState<string>()
 
   const tokenQuery = useTokenList(appConfig)
   const poolsQuery = useOwnedPools(appConfig, isDemoMode ? undefined : walletAddress)
-  const pools = isDemoMode ? demoPools : poolsQuery.data ?? []
+  const pools = isDemoBalances ? demoPools : poolsQuery.data ?? []
 
   const selectedPool = useMemo(() => {
     if (pools.length === 0) {
@@ -72,8 +75,8 @@ function RecoveryApp() {
   const assetQuery = usePoolAssets(appConfig, isDemoMode ? undefined : selectedPool?.address, tokenQuery.data)
   const termsQuery = useLockedTerms(appConfig, isDemoMode ? undefined : selectedPool?.address)
   const actions = useRecoveryActions(appConfig, walletAddress)
-  const assets = isDemoMode ? getDemoAssets(selectedPool?.tokenIdText) : assetQuery.data
-  const terms = isDemoMode ? getDemoTerms(selectedPool?.tokenIdText) : termsQuery.data ?? []
+  const assets = isDemoBalances ? getDemoAssets(selectedPool?.tokenIdText) : assetQuery.data
+  const terms = isDemoBalances ? getDemoTerms(selectedPool?.tokenIdText) : termsQuery.data ?? []
 
   const refresh = () => {
     if (isDemoMode) {
@@ -118,7 +121,7 @@ function RecoveryApp() {
         terms={terms}
         b3trAddress={appConfig.addresses.b3tr}
         vot3Address={appConfig.addresses.vot3}
-        isPoolsLoading={!isDemoMode && poolsQuery.isLoading}
+        isPoolsLoading={isDemoScanning || (!isDemoMode && poolsQuery.isLoading)}
         isAssetsLoading={!isDemoMode && (assetQuery.isLoading || tokenQuery.isLoading)}
         isTermsLoading={!isDemoMode && termsQuery.isLoading}
         isBusy={!isDemoMode && actions.isBusy}
