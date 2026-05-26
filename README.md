@@ -1,4 +1,4 @@
-# VeDelegate Pool Recovery
+# veDelegate.vet Pool Recovery
 
 Static VeDelegate recovery console for GitHub Pages.
 
@@ -47,17 +47,23 @@ Vite base path uses `VITE_BASE_PATH` first, then the GitHub repository name in A
 
 All recovery calls execute through the user's pool smart wallet. The signer remains the owner wallet. Recover-all is a multi-clause transaction: all clauses succeed or all fail.
 
+Before signing, the app simulates the transaction against the configured Thor node with the connected wallet as caller. The recovery modal lists only assets that move to the signer wallet: native VET transfers, ERC20 `Transfer` events, and GM NFT `Transfer` events. If a simulation reverts, signing is blocked and the revert text is shown.
+
+After signing, the modal keeps showing the checked recovery summary, adds a pending spinner, links the transaction ID to VeChainStats when Kit exposes it, then shows confirmed or reverted state. Closing a confirmed modal scans the wallet state again.
+
 Closing an ended auto-renew term first disables auto-renew, then closes, then withdraws term funds into the owner pool. After that, recover B3TR from the pool.
 
 GM NFTs are read from the VeBetterDAO GalaxyMember contract. If a GM NFT has a node attached, recovery first calls `detachNode(nodeId, gmTokenId)` from the pool and then transfers the NFT. If no node is attached, only the NFT transfer is built.
 
 ## Wallet UI
 
-The header uses local connect and connected-wallet buttons that open VeChain Kit modals through Kit hooks. VeChain Kit dark mode is enabled through the provider. Recovery console styles and theme tokens are scoped under `.app-shell`; the only global page styles are body margin reset and the `#root` backdrop. No custom VeChain Kit theme variables or modal CSS overrides are set. Generic send, swap, and receive quick actions are hidden.
+The header uses local connect and connected-wallet buttons that open VeChain Kit modals through Kit hooks. Social and wallet login options stay enabled through VeChain Kit. VeChain Kit dark mode is enabled through the provider. Recovery console styles and theme tokens are scoped under `.app-shell`; the only global page styles are body margin reset and the `#root` backdrop. No custom VeChain Kit theme variables or modal CSS overrides are set. Generic send, swap, and receive quick actions are hidden.
 
 ## Interface Style
 
 Pool metadata is unframed. Pools, liquid funds, and locked terms each use one thin container with row dividers inside, avoiding nested boxes around the same content.
+
+The app favicon uses the same live veDelegate.vet logo assets: `public/favicon.svg` and `public/favicon.png`.
 
 ## Demo Fixtures
 

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { QueryClient, QueryClientProvider, useQueryClient } from '@tanstack/react-query'
 import { VeChainKitProvider, useWallet, type VechainKitProviderProps } from '@vechain/vechain-kit'
 import { isAddress } from 'viem'
@@ -28,7 +28,7 @@ const walletConnectOptions: NonNullable<NonNullable<VechainKitProviderProps['dap
     ? {
         projectId: appConfig.walletConnectProjectId,
         metadata: {
-          name: 'VeDelegate Pool Recovery',
+          name: 'veDelegate.vet Pool Recovery',
           description: 'Recover funds from VeDelegate smart wallets.',
           url: window.location.origin,
           icons: [`${window.location.origin}${import.meta.env.BASE_URL}logo.png`],
@@ -78,16 +78,20 @@ function RecoveryApp() {
 
   const assetQuery = usePoolAssets(appConfig, isDemoMode ? undefined : selectedPool?.address, tokenQuery.data)
   const termsQuery = useLockedTerms(appConfig, isDemoMode ? undefined : selectedPool?.address)
-  const actions = useRecoveryActions(appConfig, walletAddress)
   const assets = isDemoBalances ? getDemoAssets(selectedPool?.tokenIdText) : assetQuery.data
   const terms = isDemoBalances ? getDemoTerms(selectedPool?.tokenIdText) : termsQuery.data ?? []
 
-  const refresh = () => {
+  const refresh = useCallback(() => {
     if (isDemoMode) {
       return
     }
     void queryClientInstance.invalidateQueries()
-  }
+  }, [isDemoMode, queryClientInstance])
+
+  const actions = useRecoveryActions(appConfig, walletAddress, {
+    tokenList: tokenQuery.data ?? [],
+    onTransactionSettled: refresh,
+  })
 
   const recoverVet = () => {
     if (!walletAddress || !selectedPool || !assets || assets.vetBalance <= 0n || isDemoMode) {

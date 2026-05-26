@@ -274,6 +274,22 @@ body {
   animation: spin 0.72s linear infinite;
 }
 
+.pending-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.pending-button:disabled {
+  opacity: 1;
+}
+
+.pending-button .button-spinner {
+  border-color: rgba(20, 10, 3, 0.26);
+  border-top-color: #140a03;
+}
+
 .action-button.small,
 .ghost-button.small {
   min-height: 30px;
@@ -423,8 +439,13 @@ body {
   border-top: 0;
 }
 
-.asset-row > code {
+.asset-name > code {
   color: var(--green);
+  overflow-wrap: anywhere;
+}
+
+.asset-note {
+  color: var(--muted);
   overflow-wrap: anywhere;
 }
 
@@ -438,6 +459,10 @@ body {
   gap: 10px;
   align-items: center;
   min-width: 0;
+}
+
+.asset-name-plain {
+  min-height: 28px;
 }
 
 .asset-name span {
@@ -458,23 +483,6 @@ body {
   object-fit: cover;
   background: #0b0d11;
   border: 1px solid var(--line);
-}
-
-.token-symbol {
-  display: grid;
-  place-items: center;
-  flex: 0 0 28px;
-  width: 28px;
-  height: 28px;
-  border: 1px solid var(--line);
-  border-radius: 50%;
-  background: var(--panel-2);
-  color: var(--muted);
-  font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
-  font-size: 0.58rem;
-  font-weight: 780;
-  letter-spacing: 0;
-  text-transform: uppercase;
 }
 
 .term-card {
@@ -537,6 +545,245 @@ body {
   font-size: 0.84rem;
 }
 
+.tx-modal-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  min-height: 100vh;
+  padding: 18px;
+  pointer-events: none;
+}
+
+.tx-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(3, 5, 7, 0.72);
+  backdrop-filter: blur(10px);
+  pointer-events: auto;
+}
+
+.tx-modal {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 0;
+  width: min(520px, 100%);
+  max-height: calc(100vh - 36px);
+  overflow: auto;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: rgba(15, 18, 23, 0.98);
+  box-shadow: 0 24px 72px rgba(0, 0, 0, 0.56);
+  pointer-events: auto;
+}
+
+.tx-modal-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: start;
+  border-bottom: 1px solid var(--line-soft);
+  padding: 18px;
+}
+
+.tx-modal-head div {
+  display: grid;
+  gap: 5px;
+}
+
+.tx-modal-head span,
+.tx-section-title em,
+.tx-modal-actions small {
+  color: var(--muted);
+  font-size: 0.7rem;
+  font-style: normal;
+  font-weight: 720;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.tx-modal-head h2 {
+  margin: 0;
+  color: var(--text);
+  font-size: 1.2rem;
+  line-height: 1.08;
+}
+
+.tx-close-button {
+  display: grid;
+  place-items: center;
+  flex: 0 0 32px;
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.tx-close-button:hover:not(:disabled) {
+  color: var(--text);
+  border-color: var(--line-hot);
+}
+
+.tx-close-button:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.tx-section-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  min-height: 44px;
+  padding: 0 18px;
+}
+
+.tx-section-title span {
+  color: var(--text);
+  font-weight: 720;
+}
+
+.tx-recovery-list {
+  display: grid;
+  gap: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--line-soft);
+}
+
+.tx-recovery-row {
+  display: flex;
+  align-items: center;
+  min-height: 58px;
+  border-bottom: 1px solid var(--line-soft);
+  padding: 10px 18px;
+}
+
+.tx-recovery-row > div {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.tx-recovery-row span {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.tx-recovery-row strong {
+  overflow: hidden;
+  color: var(--green);
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tx-token-icon,
+.tx-token-symbol {
+  flex: 0 0 30px;
+  width: 30px;
+  height: 30px;
+}
+
+.tx-token-icon {
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: #0b0d11;
+  object-fit: cover;
+}
+
+.tx-token-symbol {
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: var(--panel-2);
+  color: var(--muted);
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  font-size: 0.58rem;
+  font-weight: 780;
+}
+
+.tx-status-note {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border-top: 1px solid var(--line-soft);
+  padding: 14px 18px;
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+.tx-status-note strong {
+  color: var(--text);
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+}
+
+.tx-status-note.success strong {
+  color: var(--green);
+}
+
+.tx-status-note.error strong {
+  color: #ff7a7a;
+}
+
+.tx-status-note span {
+  overflow: hidden;
+  text-align: right;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tx-link {
+  overflow: hidden;
+  color: var(--orange);
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  font-size: 0.78rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tx-link:hover {
+  color: #fb923c;
+}
+
+.tx-empty {
+  display: grid;
+  place-items: center;
+  min-height: 92px;
+  border-top: 1px solid var(--line-soft);
+  color: var(--faint);
+  font-size: 0.82rem;
+  font-weight: 720;
+  letter-spacing: 0.04em;
+}
+
+.tx-modal-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  border-top: 1px solid var(--line-soft);
+  padding: 14px 18px 18px;
+}
+
+.tx-modal-actions > div {
+  display: flex;
+  gap: 8px;
+}
+
 @media (min-width: 720px) {
   .app-shell {
     padding: 28px;
@@ -554,7 +801,11 @@ body {
   }
 
   .asset-row {
-    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr) auto;
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .asset-row-with-note {
+    grid-template-columns: minmax(0, 1fr) auto auto;
   }
 
   .term-grid {
@@ -580,6 +831,16 @@ body {
 
   .wallet-zone {
     max-width: 100%;
+  }
+
+  .tx-modal-actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .tx-modal-actions > div,
+  .tx-modal-actions button {
+    width: 100%;
   }
 }
 

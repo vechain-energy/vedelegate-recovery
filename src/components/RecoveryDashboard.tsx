@@ -65,8 +65,6 @@ const actionLabel = (term: LockedTerm) => {
   return 'No action'
 }
 
-const symbolBadgeText = (symbol: string) => symbol.slice(0, 6)
-
 const shortTokenId = (tokenId: string) => {
   if (tokenId.length <= 13) {
     return tokenId
@@ -76,20 +74,15 @@ const shortTokenId = (tokenId: string) => {
 }
 
 type TokenMarkProps = {
-  symbol: string
   iconUrl?: string
 }
 
-function TokenMark({ symbol, iconUrl }: TokenMarkProps) {
+function TokenMark({ iconUrl }: TokenMarkProps) {
   if (iconUrl) {
     return <img src={iconUrl} alt="" className="token-icon" />
   }
 
-  return (
-    <span className="token-symbol" aria-hidden="true">
-      {symbolBadgeText(symbol)}
-    </span>
-  )
+  return null
 }
 
 export function RecoveryDashboard({
@@ -128,7 +121,7 @@ export function RecoveryDashboard({
         <div className="brand">
           <img src={logoUrl} alt="veDelegate" className="brand-logo" />
           <div>
-            <h1>Pool Recovery</h1>
+            <h1>veDelegate.vet Pool Recovery</h1>
             <div className="brand-subline">{networkLabel.toUpperCase()} / SMART WALLET EXIT</div>
           </div>
         </div>
@@ -223,13 +216,9 @@ export function RecoveryDashboard({
                   <div className="asset-table">
                     {assets.vetBalance > 0n ? (
                       <div className="asset-row">
-                        <div className="asset-name">
-                          <TokenMark symbol="VET" />
-                          <span>
-                            <strong>VET</strong>
-                          </span>
+                        <div className="asset-name asset-name-plain">
+                          <code>{formatTokenAmount(assets.vetBalance, 18)} VET</code>
                         </div>
-                        <code>{formatTokenAmount(assets.vetBalance, 18)} VET</code>
                         <button type="button" className="action-button small" onClick={onRecoverVet} disabled={isBusy}>
                           Withdraw
                         </button>
@@ -242,13 +231,9 @@ export function RecoveryDashboard({
                       return (
                         <div className="asset-row" key={item.token.address}>
                           <div className="asset-name">
-                            <TokenMark symbol={item.token.symbol} iconUrl={item.token.iconUrl} />
-                            <span>
-                              <strong>{item.token.symbol}</strong>
-                              <small>{shortAddress(item.token.address)}</small>
-                            </span>
+                            <TokenMark iconUrl={item.token.iconUrl} />
+                            <code>{formatTokenAmount(item.balance, item.token.decimals)} {item.token.symbol}</code>
                           </div>
-                          <code>{formatTokenAmount(item.balance, item.token.decimals)} {item.token.symbol}</code>
                           {isVot3 ? (
                             <button
                               type="button"
@@ -291,15 +276,15 @@ export function RecoveryDashboard({
                       const isNodeAttached = hasAttachedNode(gmNft)
 
                       return (
-                        <div className="asset-row" key={gmNft.tokenIdText}>
+                        <div className={isNodeAttached ? 'asset-row asset-row-with-note' : 'asset-row'} key={gmNft.tokenIdText}>
                           <div className="asset-name">
-                            <TokenMark symbol="GM" iconUrl={gmNft.imageUrl} />
+                            <TokenMark iconUrl={gmNft.imageUrl} />
                             <span>
                               <strong>GM #{shortTokenId(gmNft.tokenIdText)}</strong>
                               <small>LEVEL {gmNft.level.toString()}</small>
                             </span>
                           </div>
-                          <code>{isNodeAttached ? `NODE #${shortTokenId(gmNft.nodeIdAttached.toString())}` : 'READY'}</code>
+                          {isNodeAttached ? <code className="asset-note">NODE #{shortTokenId(gmNft.nodeIdAttached.toString())}</code> : null}
                           <button
                             type="button"
                             className="action-button small"
