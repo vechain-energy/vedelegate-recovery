@@ -15,4 +15,11 @@ describe('style isolation', () => {
     expect(styles).not.toMatch(/body\s*{[^}]*font/s)
     expect(styles).not.toMatch(/body\s*{[^}]*color-scheme/s)
   })
+
+  it('scopes VeChain Kit form reset to the kit root', () => {
+    expect(styles).toContain(':where(#vechain-kit-root button, #vechain-kit-root input) {')
+    expect(styles).toMatch(/:where\(#vechain-kit-root button, #vechain-kit-root input\)\s*{[^}]*appearance:\s*none;/s)
+    expect(styles).not.toMatch(/(^|\n)button\s*{[^}]*appearance:\s*none;/s)
+    expect(styles).not.toMatch(/(^|\n)input\s*{[^}]*appearance:\s*none;/s)
+  })
 })

@@ -31,6 +31,14 @@ body {
     linear-gradient(180deg, #0b0f14 0%, #07090b 52%, #050607 100%);
 }
 
+:where(#vechain-kit-root button, #vechain-kit-root input) {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+}
+
 .app-shell button {
   font: inherit;
 }
