@@ -29,8 +29,8 @@ describe('HeaderWalletControl', () => {
 
     const button = screen.getByRole('button', { name: 'Kit wallet' })
     expect(button).toHaveAttribute('data-connection-variant', 'modal')
-    expect(button).toHaveAttribute('data-desktop-variant', 'iconDomainAndAddress')
-    expect(button).toHaveAttribute('data-mobile-variant', 'iconDomainAndAddress')
+    expect(button).toHaveAttribute('data-desktop-variant', 'iconAndDomain')
+    expect(button).toHaveAttribute('data-mobile-variant', 'iconAndDomain')
   })
 
   it('shows a disabled demo wallet marker in demo mode', () => {

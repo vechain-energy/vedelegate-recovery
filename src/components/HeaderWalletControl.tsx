@@ -13,5 +13,5 @@ export function HeaderWalletControl({ isDemoMode }: HeaderWalletControlProps) {
     )
   }
 
-  return <WalletButton connectionVariant="modal" desktopVariant="iconDomainAndAddress" mobileVariant="iconDomainAndAddress" />
+  return <WalletButton connectionVariant="modal" desktopVariant="iconAndDomain" mobileVariant="iconAndDomain" />
 }

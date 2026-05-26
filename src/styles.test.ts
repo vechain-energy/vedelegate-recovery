@@ -22,4 +22,9 @@ describe('style isolation', () => {
     expect(styles).not.toMatch(/(^|\n)button\s*{[^}]*appearance:\s*none;/s)
     expect(styles).not.toMatch(/(^|\n)input\s*{[^}]*appearance:\s*none;/s)
   })
+
+  it('does not target all VeChain Kit portal buttons from the sidebar', () => {
+    expect(styles).toContain('.sidebar-wallet > #vechain-kit-root > button')
+    expect(styles).not.toMatch(/\.sidebar-wallet button/)
+  })
 })

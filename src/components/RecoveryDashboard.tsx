@@ -31,6 +31,8 @@ type RecoveryDashboardProps = {
   onRecoverTerm: (term: LockedTerm) => void
 }
 
+const projectCodeUrl = 'https://github.com/vechain-energy/vedelegate-recovery'
+
 const hasLiquidFunds = (assets?: PoolAssetSnapshot) => {
   if (!assets) {
     return false
@@ -85,6 +87,17 @@ function TokenMark({ iconUrl }: TokenMarkProps) {
   return null
 }
 
+function RefreshIcon() {
+  return (
+    <svg className="scan-icon" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M20 11a8 8 0 0 0-14.8-4.2L3 9" />
+      <path d="M3 4v5h5" />
+      <path d="M4 13a8 8 0 0 0 14.8 4.2L21 15" />
+      <path d="M21 20v-5h-5" />
+    </svg>
+  )
+}
+
 export function RecoveryDashboard({
   logoUrl,
   walletAddress,
@@ -127,34 +140,49 @@ export function RecoveryDashboard({
         </div>
       </header>
 
-      <main className="console-grid">
-        <section className="pool-panel" aria-label="Owned pools">
-          <div className="sidebar-wallet">{walletControl}</div>
-
-          <div className="panel-head">
-            <div>
-              <h2>Pools</h2>
-              <span>{walletAddress ? shortAddress(walletAddress) : 'NO WALLET'}</span>
+      {!walletAddress ? (
+        <main className="connect-empty" aria-label="Connect wallet">
+          <section className="connect-panel" role="dialog" aria-labelledby="connect-title" aria-modal="false">
+            <div className="connect-copy">
+              <span>Start recovery</span>
+              <h2 id="connect-title">Connect your wallet</h2>
+              <p>
+                This app helps you move assets from your veDelegate pools back to your wallet if the veDelegate website
+                is ever unavailable.
+              </p>
+              <p>
+                Connect the same wallet you used to sign in to veDelegate. That wallet is needed to find your pools and
+                recover any funds.
+              </p>
+              <p>
+                You will see what can be recovered before you sign anything.
+              </p>
+              <a href={projectCodeUrl} target="_blank" rel="noreferrer">
+                Technical details and code on GitHub
+              </a>
             </div>
+            <div className="connect-action">{walletControl}</div>
+          </section>
+        </main>
+      ) : (
+        <main className="console-grid">
+        <section className="pool-panel" aria-label="Owned pools">
+          <div className="panel-head pool-panel-head">
+            <div className="sidebar-wallet">{walletControl}</div>
             <button
               type="button"
-              className="ghost-button scan-button"
+              className="ghost-button scan-button scan-icon-button"
               onClick={onRefresh}
-              disabled={!walletAddress || isBusy || isPoolsLoading}
+              disabled={isBusy || isPoolsLoading}
               aria-busy={isPoolsLoading}
               aria-label={isPoolsLoading ? 'Scanning pools' : 'Scan'}
+              title={isPoolsLoading ? 'Scanning pools' : 'Scan pools'}
             >
-              {isPoolsLoading ? <span className="button-spinner" aria-hidden="true" /> : null}
-              <span>{isPoolsLoading ? 'Scanning' : 'Scan'}</span>
+              {isPoolsLoading ? <span className="button-spinner" aria-hidden="true" /> : <RefreshIcon />}
             </button>
           </div>
 
-          {!walletAddress ? (
-            <div className="empty-state">
-              <strong>CONNECT WALLET</strong>
-              <span>Owned pools load here.</span>
-            </div>
-          ) : isPoolsLoading ? (
+          {isPoolsLoading ? (
             <div className="empty-state">SCANNING POOLS</div>
           ) : pools.length === 0 ? (
             <div className="empty-state">
@@ -184,14 +212,6 @@ export function RecoveryDashboard({
 
         <section className="detail-panel" aria-label="Pool recovery">
           <div className="pool-summary">
-            <div>
-              <h2 title={selectedPool ? `Pool #${selectedPool.tokenIdText}` : undefined}>
-                {selectedPool ? `Pool #${shortTokenId(selectedPool.tokenIdText)}` : 'Select pool'}
-              </h2>
-              <span title={selectedPool ? selectedPool.address : undefined}>
-                {selectedPool ? shortAddress(selectedPool.address) : 'NO POOL SELECTED'}
-              </span>
-            </div>
             <button type="button" className="action-button" onClick={onRecoverAll} disabled={!canRecoverAll}>
               Recover all
             </button>
@@ -355,6 +375,7 @@ export function RecoveryDashboard({
           )}
         </section>
       </main>
+      )}
     </div>
   )
 }

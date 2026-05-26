@@ -108,14 +108,21 @@ body {
 
 .sidebar-wallet {
   display: flex;
+  flex: 1 1 auto;
+  align-items: center;
   justify-content: flex-start;
-  width: 100%;
-  padding: 0 2px 18px;
+  overflow: hidden;
   min-width: 0;
 }
 
-.sidebar-wallet > * {
+.sidebar-wallet > #vechain-kit-root {
   max-width: 100%;
+  min-width: 0;
+}
+
+.sidebar-wallet > #vechain-kit-root > button {
+  max-width: 100%;
+  overflow: hidden;
 }
 
 .demo-wallet {
@@ -137,6 +144,81 @@ body {
   gap: 20px;
 }
 
+.connect-empty {
+  display: grid;
+  place-items: center;
+  min-height: calc(100vh - 150px);
+  padding: 12px 0 40px;
+}
+
+.connect-panel {
+  position: relative;
+  display: grid;
+  gap: 22px;
+  width: min(560px, 100%);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+  box-shadow: 0 18px 44px var(--shadow);
+  padding: 26px;
+}
+
+.connect-copy {
+  display: grid;
+  gap: 12px;
+}
+
+.connect-copy span {
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 720;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.connect-copy h2 {
+  margin: 0;
+  font-size: clamp(1.6rem, 7vw, 2.55rem);
+  line-height: 1.05;
+}
+
+.connect-copy p {
+  max-width: 56ch;
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.connect-copy a {
+  width: fit-content;
+  color: var(--orange);
+  font-size: 0.82rem;
+  font-weight: 720;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.connect-copy a:hover {
+  color: #fb923c;
+}
+
+.connect-action {
+  display: flex;
+  justify-content: flex-start;
+  min-width: 0;
+  border-top: 1px solid var(--line-soft);
+  padding-top: 18px;
+}
+
+.connect-action > * {
+  width: 100%;
+  max-width: 100%;
+}
+
+.connect-action > #vechain-kit-root > button {
+  width: 100%;
+}
+
 .pool-panel,
 .detail-panel {
   min-width: 0;
@@ -148,6 +230,11 @@ body {
   gap: 12px;
   align-items: flex-start;
   padding: 2px 2px 12px;
+}
+
+.pool-panel-head {
+  align-items: center;
+  padding: 0 2px 14px;
 }
 
 .panel-head span,
@@ -171,7 +258,7 @@ body {
 
 .pool-summary {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   gap: 16px;
   align-items: flex-start;
   padding: 2px 2px 18px;
@@ -211,6 +298,23 @@ body {
   justify-content: center;
   gap: 8px;
   min-width: 64px;
+}
+
+.scan-icon-button {
+  flex: 0 0 38px;
+  width: 38px;
+  min-width: 38px;
+  padding: 0;
+}
+
+.scan-icon {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 2;
 }
 
 .button-spinner {
@@ -746,6 +850,11 @@ body {
   .pool-panel {
     position: sticky;
     top: 16px;
+    padding-top: 68px;
+  }
+
+  .connect-empty {
+    padding-top: 54px;
   }
 
   .asset-row {
@@ -772,8 +881,11 @@ body {
     flex-direction: column;
   }
 
-  .sidebar-wallet,
-  .sidebar-wallet button {
+  .sidebar-wallet > #vechain-kit-root,
+  .sidebar-wallet > #vechain-kit-root > button,
+  .connect-action > #vechain-kit-root,
+  .connect-action > #vechain-kit-root > button,
+  .demo-wallet {
     width: 100%;
   }
 

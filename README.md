@@ -25,16 +25,21 @@ Ended auto-renew terms are handled in order: disable auto-renew, close term, wit
 
 ## Wallet Connect
 
-The wallet button sits in the pool sidebar above the pool list. It uses VeChain Kit's reusable `WalletButton`.
+The disconnected screen asks users to connect the same wallet they used to sign in to veDelegate. That wallet is needed to find their pools and recover funds if the veDelegate website is ever unavailable.
+
+When connected, the wallet button sits in the pool sidebar header where the pool owner label would otherwise be. It shows the wallet domain in one compact line and a refresh icon appears on the right for rescanning pools. The active pool row in the sidebar is the selected pool headline; the detail side keeps only the `Recover all` action above recovery sections. It uses VeChain Kit's reusable `WalletButton`.
+
+![Connect wallet screen](docs/screenshots/connect-screen.jpg)
 
 Social login stays enabled through VeChain Kit. VeWorld, Sync2, WalletConnect, and VeChain ecosystem login are supported by provider config.
+The wallet UI is forced to English so browser or account language settings do not change the recovery flow text.
 
 ![VeChain Kit connect modal](docs/screenshots/connect-modal.jpg)
 
 ## Operator Flow
 
-1. Connect the wallet that owns veDelegate pool NFTs.
-2. Press `Scan`.
+1. Connect the same wallet used to sign in to veDelegate.
+2. Press the refresh icon to scan pools.
 3. Select a pool.
 4. Review liquid funds, GM NFTs, and locked terms.
 5. Press a single asset action or `Recover all`.

@@ -87,26 +87,49 @@ const renderDashboard = (overrides: Partial<React.ComponentProps<typeof Recovery
 
 describe('RecoveryDashboard', () => {
   it('shows connect empty state', () => {
-    renderDashboard({ walletAddress: undefined, pools: [], selectedPool: undefined })
+    renderDashboard({
+      walletAddress: undefined,
+      pools: [],
+      selectedPool: undefined,
+      walletControl: <button type="button">Login</button>,
+    })
     expect(screen.getByRole('heading', { name: 'veDelegate.vet Pool Recovery' })).toBeInTheDocument()
-    expect(screen.getByText('CONNECT WALLET')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Login' })).toBeInTheDocument()
+    expect(screen.getByRole('dialog', { name: 'Connect your wallet' })).toBeInTheDocument()
+    expect(screen.getByText(/if the veDelegate website is ever unavailable/i)).toBeInTheDocument()
+    expect(screen.getByText(/same wallet you used to sign in to veDelegate/i)).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: 'Technical details and code on GitHub' })).toHaveAttribute(
+      'href',
+      'https://github.com/vechain-energy/vedelegate-recovery',
+    )
+    expect(screen.queryByRole('heading', { name: 'Pools' })).not.toBeInTheDocument()
+    expect(screen.queryByText('NO WALLET')).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'Scan' })).not.toBeInTheDocument()
   })
 
-  it('places the wallet control above pool selection in the sidebar', () => {
+  it('places the wallet control in the pool header with scan on the right', () => {
     const view = renderDashboard()
     const poolPanel = screen.getByLabelText('Owned pools')
+    const panelHead = poolPanel.querySelector('.pool-panel-head')
     const sidebarWallet = poolPanel.querySelector('.sidebar-wallet')
+    const scanButton = within(poolPanel).getByRole('button', { name: 'Scan' })
 
-    expect(sidebarWallet).toContainElement(within(poolPanel).getByRole('button', { name: 'Wallet' }))
-    expect(Array.from(poolPanel.children)[0]).toBe(sidebarWallet)
+    expect(panelHead as HTMLElement).toContainElement(sidebarWallet as HTMLElement)
+    expect(sidebarWallet as HTMLElement).toContainElement(within(poolPanel).getByRole('button', { name: 'Wallet' }))
+    expect(panelHead?.firstElementChild).toBe(sidebarWallet)
+    expect(panelHead?.lastElementChild).toBe(scanButton)
+    expect(scanButton).toHaveClass('scan-icon-button')
+    expect(scanButton).toHaveTextContent('')
+    expect(within(poolPanel).queryByRole('heading', { name: 'Pools' })).not.toBeInTheDocument()
     expect(view.container.querySelector('.topbar .sidebar-wallet')).not.toBeInTheDocument()
   })
 
   it('renders owned pool list', () => {
     renderDashboard()
     expect(screen.getByRole('button', { name: /#1/ })).toBeInTheDocument()
-    expect(screen.getByText('Pool #1')).toBeInTheDocument()
-    expect(screen.getByTitle(poolAddress)).toHaveTextContent('0x2222...2222')
+    expect(screen.getByTitle('Pool #1')).toHaveTextContent('#1')
+    expect(screen.getByText('0x2222...2222')).toBeInTheDocument()
+    expect(screen.queryByText('Pool #1')).not.toBeInTheDocument()
     expect(screen.queryByText(poolAddress)).not.toBeInTheDocument()
   })
 
@@ -187,7 +210,8 @@ describe('RecoveryDashboard', () => {
       vot3Address: demoVot3Address,
     })
 
-    expect(screen.getByText('Pool #123456...7890')).toBeInTheDocument()
+    expect(screen.getByText('#123456...7890')).toBeInTheDocument()
+    expect(screen.queryByText('Pool #123456...7890')).not.toBeInTheDocument()
     expect(screen.queryByText(`Pool #${demoLongPoolTokenId.toString()}`)).not.toBeInTheDocument()
     expect(screen.queryByText('NATIVE')).not.toBeInTheDocument()
     expect(screen.getByText('1234.5678 VET')).toBeInTheDocument()

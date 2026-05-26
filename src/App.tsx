@@ -3,6 +3,7 @@ import { QueryClient, QueryClientProvider, useQueryClient } from '@tanstack/reac
 import { VeChainKitProvider, useWallet, type VechainKitProviderProps } from '@vechain/vechain-kit'
 import { isAddress } from 'viem'
 import { appConfig } from './config'
+import { VECHAIN_KIT_LANGUAGE } from './config/localization'
 import { HeaderWalletControl } from './components/HeaderWalletControl'
 import { RecoveryDashboard } from './components/RecoveryDashboard'
 import { useLockedTerms, useOwnedPools, usePoolAssets, useTokenList } from './hooks/useRecoveryQueries'
@@ -189,6 +190,7 @@ export default function App() {
           description: 'Recover VeDelegate pool funds.',
         }}
         hiddenQuickActions={hiddenQuickActions}
+        language={VECHAIN_KIT_LANGUAGE}
         darkMode
       >
         <RecoveryApp />
