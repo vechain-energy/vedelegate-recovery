@@ -53,7 +53,11 @@ const hiddenQuickActions: NonNullable<VechainKitProviderProps['hiddenQuickAction
 type DemoPreview = {
   title: string
   summary: RecoverySimulationSummary
+  phase: 'ready' | 'pending'
+  txId?: string
 }
+
+const demoPendingTxId = `0x${'d'.repeat(64)}`
 
 function RecoveryApp() {
   const { account } = useWallet()
@@ -114,6 +118,7 @@ function RecoveryApp() {
       setDemoPreview({
         title: 'Recover pool assets',
         summary: buildDemoRecoverAllSimulationSummary(assets),
+        phase: 'ready',
       })
       return
     }
@@ -179,13 +184,24 @@ function RecoveryApp() {
         <RecoveryTransactionModal
           isOpen
           title={demoPreview.title}
-          phase="ready"
+          phase={demoPreview.phase}
           network={appConfig.network}
           summary={demoPreview.summary}
+          txId={demoPreview.txId}
           isWalletWaiting={false}
-          isChainPending={false}
+          isChainPending={demoPreview.phase === 'pending'}
           onClose={() => setDemoPreview(undefined)}
-          onConfirm={() => undefined}
+          onConfirm={() =>
+            setDemoPreview((current) =>
+              current
+                ? {
+                    ...current,
+                    phase: 'pending',
+                    txId: demoPendingTxId,
+                  }
+                : current,
+            )
+          }
         />
       ) : null}
     </>

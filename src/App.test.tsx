@@ -32,6 +32,12 @@ describe('VeChain Kit provider config', () => {
     expect(appSource).toMatch(/onTransactionSettled:\s*refresh/)
   })
 
+  it('lets demo recovery preview advance to pending without a real wallet signature', () => {
+    expect(appSource).toContain("phase: 'ready'")
+    expect(appSource).toContain("phase: 'pending'")
+    expect(appSource).toContain('demoPendingTxId')
+  })
+
   it('refreshes recovery data only when a successful modal is closed', () => {
     expect(recoveryActionsSource).toMatch(/const shouldRefresh = activeTransaction\?\.phase === 'success'/)
     expect(recoveryActionsSource).toMatch(/if \(shouldRefresh\) {\s*options\.onTransactionSettled\?\.\(\)\s*}/)
