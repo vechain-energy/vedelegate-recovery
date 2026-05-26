@@ -244,6 +244,14 @@ code {
 }
 
 .pool-row span,
+.pool-row code {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pool-row span,
 .detail-head h2,
 .term-main strong,
 .term-main span {

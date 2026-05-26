@@ -103,7 +103,7 @@ describe('RecoveryDashboard', () => {
   })
 
   it('renders demo balances and term actions', () => {
-    renderDashboard({
+    const view = renderDashboard({
       pools: demoPools,
       selectedPool: demoPools[0],
       selectedPoolTokenId: demoLongPoolTokenId.toString(),
@@ -113,7 +113,8 @@ describe('RecoveryDashboard', () => {
       vot3Address: demoVot3Address,
     })
 
-    expect(screen.getByText(`Pool #${demoLongPoolTokenId.toString()}`)).toBeInTheDocument()
+    expect(screen.getByText('Pool #123456...7890')).toBeInTheDocument()
+    expect(screen.queryByText(`Pool #${demoLongPoolTokenId.toString()}`)).not.toBeInTheDocument()
     expect(screen.queryByText('NATIVE')).not.toBeInTheDocument()
     expect(screen.getAllByText('VET')).not.toHaveLength(0)
     expect(screen.getAllByText('B3TR')).not.toHaveLength(0)
@@ -124,5 +125,7 @@ describe('RecoveryDashboard', () => {
     expect(screen.getAllByRole('button', { name: 'Close + withdraw' })).toHaveLength(2)
     expect(screen.getByRole('button', { name: 'Withdraw term' })).toBeInTheDocument()
     expect(screen.getAllByRole('button', { name: 'No action' })).toHaveLength(2)
+    expect(view.container.querySelectorAll('.token-icon')).not.toHaveLength(0)
+    expect(view.container.querySelector('img[src*="735a5e4a70116463649aa9c508b5d18361f10ab7.png"]')).toBeInTheDocument()
   })
 })

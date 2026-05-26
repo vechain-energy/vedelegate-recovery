@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import type { AppConfig } from '../config'
-import { getCoreTokens, parseTokenRegistry } from './tokens'
+import { getCoreTokens, parseTokenRegistry, tokenRegistryAssetUrl } from './tokens'
 
 const config: AppConfig = {
   network: 'main',
@@ -43,5 +43,25 @@ describe('token registry parsing', () => {
 
     expect(tokens.map((token) => token.symbol)).toEqual(['B3TR', 'VOT3', 'veB3TR', 'REG'])
     expect(tokens[3]?.iconUrl).toBe('https://vechain.github.io/token-registry/assets/reg.png')
+  })
+
+  it('resolves registry image paths', () => {
+    expect(tokenRegistryAssetUrl('reg.png')).toBe('https://vechain.github.io/token-registry/assets/reg.png')
+    expect(tokenRegistryAssetUrl('assets/reg.png')).toBe('https://vechain.github.io/token-registry/assets/reg.png')
+    expect(tokenRegistryAssetUrl('https://cdn.example/reg.png')).toBe('https://cdn.example/reg.png')
+  })
+
+  it('uses registry images for core tokens', () => {
+    const core = getCoreTokens(config)
+
+    expect(core.find((token) => token.symbol === 'B3TR')?.iconUrl).toBe(
+      'https://vechain.github.io/token-registry/assets/5a9eb5e11751a649ca00298f3237c4624712af75.png',
+    )
+    expect(core.find((token) => token.symbol === 'VOT3')?.iconUrl).toBe(
+      'https://vechain.github.io/token-registry/assets/dcc6e7f09932a389a536fe74107cd73af445dd65.png',
+    )
+    expect(core.find((token) => token.symbol === 'veB3TR')?.iconUrl).toBe(
+      'https://vechain.github.io/token-registry/assets/1c641b86096d56bf13d49f38388accd6db8b8b2e.png',
+    )
   })
 })

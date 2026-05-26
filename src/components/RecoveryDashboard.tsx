@@ -62,6 +62,14 @@ const actionLabel = (term: LockedTerm) => {
 
 const symbolBadgeText = (symbol: string) => symbol.slice(0, 6)
 
+const shortTokenId = (tokenId: string) => {
+  if (tokenId.length <= 13) {
+    return tokenId
+  }
+
+  return `${tokenId.slice(0, 6)}...${tokenId.slice(-4)}`
+}
+
 type TokenMarkProps = {
   symbol: string
   iconUrl?: string
@@ -153,9 +161,10 @@ export function RecoveryDashboard({
                     type="button"
                     key={pool.tokenIdText}
                     className={active ? 'pool-row active' : 'pool-row'}
+                    title={`Pool #${pool.tokenIdText}`}
                     onClick={() => onSelectPool(pool.tokenIdText)}
                   >
-                    <span>#{pool.tokenIdText}</span>
+                    <span>#{shortTokenId(pool.tokenIdText)}</span>
                     <code>{shortAddress(pool.address)}</code>
                   </button>
                 )
@@ -167,7 +176,9 @@ export function RecoveryDashboard({
         <section className="panel detail-panel" aria-label="Pool recovery">
           <div className="panel-head detail-head">
             <div>
-              <h2>{selectedPool ? `Pool #${selectedPool.tokenIdText}` : 'Select pool'}</h2>
+              <h2 title={selectedPool ? `Pool #${selectedPool.tokenIdText}` : undefined}>
+                {selectedPool ? `Pool #${shortTokenId(selectedPool.tokenIdText)}` : 'Select pool'}
+              </h2>
               <span>{selectedPool ? selectedPool.address : 'NO POOL SELECTED'}</span>
             </div>
             <button type="button" className="action-button" onClick={onRecoverAll} disabled={!canRecoverAll}>
@@ -264,7 +275,9 @@ export function RecoveryDashboard({
                         <div className="term-main">
                           <div>
                             <strong>TERM #{term.tokenIdText}</strong>
-                            <span>POOL #{term.metadata.veDelegatePoolTokenId.toString()}</span>
+                            <span title={`Pool #${term.metadata.veDelegatePoolTokenId.toString()}`}>
+                              POOL #{shortTokenId(term.metadata.veDelegatePoolTokenId.toString())}
+                            </span>
                           </div>
                           <em>{statusLabel(term)}</em>
                         </div>

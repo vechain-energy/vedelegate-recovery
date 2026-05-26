@@ -1,6 +1,7 @@
 import type { Address } from 'viem'
 import type { LockedTerm } from './lib/lockedTerms'
 import type { PoolAssetSnapshot, PoolInfo } from './lib/pools'
+import { tokenRegistryAssetUrl } from './lib/tokens'
 
 export const demoWalletAddress = '0xA11CE00000000000000000000000000000000000' as Address
 export const demoB3trAddress = '0x5ef79995FE8a89e0812330E4378eB2660ceDe699' as Address
@@ -29,23 +30,58 @@ export const demoAssets: PoolAssetSnapshot = {
   vetBalance: 1234567890000000000000n,
   tokenBalances: [
     {
-      token: { address: demoB3trAddress, symbol: 'B3TR', name: 'B3TR', decimals: 18, source: 'core' },
+      token: {
+        address: demoB3trAddress,
+        symbol: 'B3TR',
+        name: 'B3TR',
+        decimals: 18,
+        iconUrl: tokenRegistryAssetUrl('5a9eb5e11751a649ca00298f3237c4624712af75.png'),
+        source: 'core',
+      },
       balance: 8042000000000000000000n,
     },
     {
-      token: { address: demoVot3Address, symbol: 'VOT3', name: 'VOT3', decimals: 18, source: 'core' },
+      token: {
+        address: demoVot3Address,
+        symbol: 'VOT3',
+        name: 'VOT3',
+        decimals: 18,
+        iconUrl: tokenRegistryAssetUrl('dcc6e7f09932a389a536fe74107cd73af445dd65.png'),
+        source: 'core',
+      },
       balance: 1250000000000000000000n,
     },
     {
-      token: { address: demoVeb3trAddress, symbol: 'veB3TR', name: 'veB3TR', decimals: 18, source: 'core' },
+      token: {
+        address: demoVeb3trAddress,
+        symbol: 'veB3TR',
+        name: 'veB3TR',
+        decimals: 18,
+        iconUrl: tokenRegistryAssetUrl('1c641b86096d56bf13d49f38388accd6db8b8b2e.png'),
+        source: 'core',
+      },
       balance: 530000000000000000000n,
     },
     {
-      token: { address: demoShaAddress, symbol: 'SHA', name: 'Safe Haven', decimals: 18, source: 'registry' },
+      token: {
+        address: demoShaAddress,
+        symbol: 'SHA',
+        name: 'Safe Haven',
+        decimals: 18,
+        iconUrl: tokenRegistryAssetUrl('735a5e4a70116463649aa9c508b5d18361f10ab7.png'),
+        source: 'registry',
+      },
       balance: 72000000000000000000n,
     },
     {
-      token: { address: demoOceanAddress, symbol: 'OCE', name: 'OceanEx', decimals: 18, source: 'registry' },
+      token: {
+        address: demoOceanAddress,
+        symbol: 'OCE',
+        name: 'OceanEx',
+        decimals: 18,
+        iconUrl: tokenRegistryAssetUrl('6fcdaf9e2663a21aecc7518f78ec6d1b2ebfd1ed.png'),
+        source: 'registry',
+      },
       balance: 0n,
     },
   ],

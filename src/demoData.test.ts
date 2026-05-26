@@ -13,8 +13,14 @@ describe('demo data', () => {
     expect(balances.get('VOT3')?.balance).toBeGreaterThan(0n)
     expect(balances.get('veB3TR')?.token.address).toBe(demoVeb3trAddress)
     expect(balances.get('veB3TR')?.balance).toBeGreaterThan(0n)
+    expect(balances.get('veB3TR')?.token.iconUrl).toBe(
+      'https://vechain.github.io/token-registry/assets/1c641b86096d56bf13d49f38388accd6db8b8b2e.png',
+    )
     expect(balances.get('SHA')?.token.source).toBe('registry')
     expect(balances.get('SHA')?.balance).toBeGreaterThan(0n)
+    expect(balances.get('SHA')?.token.iconUrl).toBe(
+      'https://vechain.github.io/token-registry/assets/735a5e4a70116463649aa9c508b5d18361f10ab7.png',
+    )
     expect(balances.get('OCE')?.balance).toBe(0n)
   })
 
